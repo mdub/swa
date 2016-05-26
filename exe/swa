@@ -1,0 +1,16 @@
+#! /usr/bin/env ruby
+
+$LOAD_PATH << File.expand_path("../../lib", __FILE__)
+
+require "clamp"
+
+$stdout.sync = true
+$stderr.sync = true
+
+Clamp do
+
+  def execute
+    puts "Hi"
+  end
+
+end
