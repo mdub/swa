@@ -2,6 +2,7 @@
 
 $LOAD_PATH << File.expand_path("../../lib", __FILE__)
 
+require "aws-sdk-resources"
 require "clamp"
 
 $stdout.sync = true
@@ -9,8 +10,22 @@ $stderr.sync = true
 
 Clamp do
 
-  def execute
-    puts "Hi"
+  subcommand "ec2", "EC2 stuff" do
+
+    subcommand "instances", "list instances" do
+
+      def execute
+        ec2.instances.each do |i|
+          puts i.instance_id
+        end
+      end
+
+    end
+
+    def ec2
+      ::Aws::EC2::Resource.new
+    end
+
   end
 
 end
