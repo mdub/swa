@@ -4,6 +4,8 @@ $LOAD_PATH << File.expand_path("../../lib", __FILE__)
 
 require "aws-sdk-resources"
 require "clamp"
+require "swa/ec2/instance"
+require "yaml"
 
 $stdout.sync = true
 $stderr.sync = true
@@ -12,18 +14,46 @@ Clamp do
 
   subcommand "ec2", "EC2 stuff" do
 
-    subcommand "instances", "list instances" do
+    subcommand ["instances", "is"], "list instances" do
 
-      def execute
-        ec2.instances.each do |i|
-          puts i.instance_id
+      self.default_subcommand = "summary"
+
+      subcommand ["summary", "s"], "brief summary (one per line)" do
+
+        def execute
+          wrapped_instances.each do |i|
+            puts i.summary
+          end
         end
+
+      end
+
+      subcommand ["detail", "d"], "full details" do
+
+        def execute
+          display_data(wrapped_instances.map(&:data).to_a)
+        end
+
+      end
+
+      private
+
+      def wrapped_instances
+        selected_instances.lazy.map(&Swa::EC2::Instance.method(:new))
+      end
+
+      def selected_instances
+        ec2.instances
       end
 
     end
 
     def ec2
       ::Aws::EC2::Resource.new
+    end
+
+    def display_data(data)
+      puts YAML.dump(data)
     end
 
   end
