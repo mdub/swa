@@ -93,6 +93,36 @@ Clamp do
 
     end
 
+    subcommand ["instance", "i"], "list instances" do
+
+      parameter "INSTANCE-ID", "instance ID"
+
+      self.default_subcommand = "summary"
+
+      subcommand ["summary", "s"], "brief summary (one per line)" do
+
+        def execute
+          puts instance.summary
+        end
+
+      end
+
+      subcommand ["detail", "d"], "full details" do
+
+        def execute
+          display_data(instance.data)
+        end
+
+      end
+
+      private
+
+      def instance
+        Swa::EC2::Instance.new(ec2.instance(instance_id))
+      end
+
+    end
+
     def ec2
       ::Aws::EC2::Resource.new
     end
