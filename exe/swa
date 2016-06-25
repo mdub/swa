@@ -123,6 +123,15 @@ Clamp do
 
     end
 
+    protected
+
+    def parse(arguments)
+      if arguments.first =~ /^(\w+)-[0-9a-f]+$/
+        arguments = [$1] + arguments if self.class.find_subcommand($1)
+      end
+      super(arguments)
+    end
+
     def ec2
       ::Aws::EC2::Resource.new
     end
