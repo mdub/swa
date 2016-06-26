@@ -82,6 +82,9 @@ module Swa
       subcommand ["images", "amis"], "list images" do
 
         option "--owned-by", "OWNER", "limit to those with selected owner", :default => "self"
+        option "--named", "PATTERN", "limit to those with matching name"
+
+        include TagFilterOptions
 
         self.default_subcommand = "summary"
 
@@ -105,11 +108,15 @@ module Swa
 
         private
 
+        def named=(name_pattern)
+          add_filter("name", name_pattern)
+        end
+
         def images
           options = {
             :owners => [owned_by]
           }
-          # options[:filters] = filters unless filters.empty?
+          options[:filters] = filters unless filters.empty?
           ec2.images(options).lazy.map(&Swa::EC2::Image.method(:new))
         end
 
