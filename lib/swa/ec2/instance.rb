@@ -1,15 +1,12 @@
+require "swa/resource"
+require "swa/ec2/tagged_resource"
+
 module Swa
   module EC2
 
-    class Instance
+    class Instance < Resource
 
-      def initialize(aws_instance)
-        @aws_instance = aws_instance
-      end
-
-      def i
-        @aws_instance
-      end
+      include TaggedResource
 
       def summary
         [
@@ -23,45 +20,9 @@ module Swa
         ].join(" ")
       end
 
-      def data
-        camelize_keys(i.data.to_h)
-      end
-
-      def tags
-        i.tags.each_with_object({}) do |tag, result|
-          result[tag.key] = tag.value
-        end
-      end
-
-      def name
-        tags["Name"]
-      end
-
-      def quoted_name
-        %("#{name}") if name
-      end
-
       private
 
-      def pad(s, width)
-        s = (s || "").to_s
-        s.ljust(width)
-      end
-
-      def camelize_keys(data)
-        case data
-        when Hash
-          data.map { |k,v| [camelize(k), camelize_keys(v)] }.to_h
-        when Array
-          data.map { |v| camelize_keys(v) }
-        else
-          data
-        end
-      end
-
-      def camelize(symbol)
-        symbol.to_s.split("_").map(&:capitalize).join("")
-      end
+      alias_method :i, :aws_resource
 
     end
 
