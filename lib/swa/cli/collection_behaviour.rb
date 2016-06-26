@@ -15,10 +15,14 @@ module Swa
           end
         end
 
-        target.subcommand ["detail", "d"], "full details" do
+        target.subcommand ["data", "d"], "full details" do
+
+          parameter "[QUERY]", "JMESPath expression"
+
           def execute
-            display_data(collection.map(&:data).to_a)
+            display_data(collection.map(&:data).to_a, query)
           end
+
         end
 
       end

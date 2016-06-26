@@ -1,6 +1,6 @@
-require "aws-sdk-resources"
 require "clamp"
 require "console_logger"
+require "jmespath"
 require "yaml"
 
 module Swa
@@ -15,6 +15,8 @@ module Swa
              :attribute_name => :secret_access_key
       option "--session-token", "KEY", "AWS security token",
              :attribute_name => :session_token
+
+      option ["-Y", "--yaml"], :flag, "output data in YAML format"
 
       option ["--debug"], :flag, "enable debugging"
 
@@ -41,8 +43,19 @@ module Swa
         super(arguments)
       end
 
-      def display_data(data)
-        puts YAML.dump(data)
+      def format_data(data)
+        if yaml?
+          YAML.dump(data)
+        else
+          JSON.pretty_unparse(data)
+        end
+      end
+
+      def display_data(data, jmespath_expression = nil)
+        unless jmespath_expression.nil?
+          data = JMESPath.search(jmespath_expression, data)
+        end
+        puts format_data(data)
       end
 
     end
