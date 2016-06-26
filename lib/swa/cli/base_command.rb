@@ -1,6 +1,7 @@
 require "clamp"
 require "console_logger"
 require "jmespath"
+require "multi_json"
 require "yaml"
 
 module Swa
@@ -47,7 +48,7 @@ module Swa
         if yaml?
           YAML.dump(data)
         else
-          JSON.pretty_unparse(data)
+          MultiJson.dump(data, :pretty => true)
         end
       end
 
