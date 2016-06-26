@@ -4,24 +4,19 @@ require "swa/ec2/tagged_resource"
 module Swa
   module EC2
 
-    class Instance < Resource
+    class Image < Resource
 
       include TaggedResource
 
       def summary
         [
-          pad(i.instance_id, 11),
-          pad(i.image_id, 13),
-          pad(i.instance_type, 10),
-          pad(i.state.name, 11),
-          pad(i.private_ip_address, 15),
-          pad(i.public_ip_address, 15),
+          pad(ami.image_id, 13),
           quoted_name
         ].join(" ")
       end
 
       def name
-        tags["Name"]
+        ami.name
       end
 
       def quoted_name
@@ -30,7 +25,7 @@ module Swa
 
       private
 
-      alias_method :i, :aws_resource
+      alias_method :ami, :aws_resource
 
     end
 

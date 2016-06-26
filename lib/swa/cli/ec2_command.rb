@@ -1,5 +1,6 @@
 require "aws-sdk-resources"
 require "swa/cli/base_command"
+require "swa/ec2/image"
 require "swa/ec2/instance"
 
 module Swa
@@ -112,6 +113,42 @@ module Swa
 
         def instance
           Swa::EC2::Instance.new(ec2.instance(instance_id))
+        end
+
+      end
+
+      subcommand ["images", "amis"], "list images" do
+
+        option "--owned-by", "OWNER", "limit to those with selected owner", :default => "self"
+
+        self.default_subcommand = "summary"
+
+        subcommand ["summary", "s"], "brief summary (one per line)" do
+
+          def execute
+            images.each do |i|
+              puts i.summary
+            end
+          end
+
+        end
+
+        subcommand ["detail", "d"], "full details" do
+
+          def execute
+            display_data(images.map(&:data).to_a)
+          end
+
+        end
+
+        private
+
+        def images
+          options = {
+            :owners => [owned_by]
+          }
+          # options[:filters] = filters unless filters.empty?
+          ec2.images(options).lazy.map(&Swa::EC2::Image.method(:new))
         end
 
       end

@@ -11,14 +11,6 @@ module Swa
         end
       end
 
-      def name
-        tags["Name"]
-      end
-
-      def quoted_name
-        %("#{name}") if name
-      end
-
     end
 
   end
