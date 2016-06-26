@@ -103,16 +103,22 @@ module Swa
 
       subcommand ["instances", "is"], "list instances" do
 
-        option "--named", "NAME", "with matching name"
+        option "--named", "NAME", "with matching name" do |name|
+          add_tag_filter("Name", name)
+        end
+
+        option ["--security-group", "--sg"], "GROUP-ID", "security-group id" do |group|
+          if group =~ /^sg-/
+            add_filter("instance.group-id", group)
+          else
+            add_filter("instance.group-name", group)
+          end
+        end
 
         include TagFilterOptions
         include CollectionBehaviour
 
         private
-
-        def named=(name)
-          add_tag_filter("Name", name)
-        end
 
         def instances
           options = {}
