@@ -125,7 +125,7 @@ module Swa
       protected
 
       def ec2
-        ::Aws::EC2::Resource.new
+        ::Aws::EC2::Resource.new(aws_config)
       end
 
     end
