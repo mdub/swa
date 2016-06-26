@@ -1,5 +1,6 @@
 require "aws-sdk-resources"
 require "swa/cli/base_command"
+require "swa/cli/tag_filter_options"
 require "swa/ec2/image"
 require "swa/ec2/instance"
 
@@ -10,12 +11,9 @@ module Swa
 
       subcommand ["instances", "is"], "list instances" do
 
-        option "--filter", "NAME=VALUE", "apply a filter",
-               :multivalued => true, :attribute_name => :filters
-        option "--tagged", "KEY[=VALUE]", "with matching tag",
-               :multivalued => true, :attribute_name => :tag_list
         option "--named", "NAME", "with matching name"
-        option "--stack", "NAME", "from the named CloudFormation stack"
+
+        include TagFilterOptions
 
         self.default_subcommand = "summary"
 
@@ -37,46 +35,10 @@ module Swa
 
         end
 
-        protected
-
-        def append_to_filters(arg)
-          name, value = arg.split("=", 2)
-          raise ArgumentError, "no value supplied" unless value
-          add_filter(name, value)
-        end
-
-        def append_to_tag_list(arg)
-          key, value_pattern = arg.split("=", 2)
-          add_tag_filter(key, value_pattern)
-        end
+        private
 
         def named=(name)
           add_tag_filter("Name", name)
-        end
-
-        def stack=(name)
-          add_tag_filter("aws:cloudformation:stack-name", name)
-        end
-
-        private
-
-        def filters
-          @filters ||= []
-        end
-
-        def add_filter(name, *values)
-          filters << {
-            name: name,
-            values: values
-          }
-        end
-
-        def add_tag_filter(key, value_pattern = nil)
-          if value_pattern
-            add_filter("tag:#{key}", value_pattern)
-          else
-            add_filter("tag-key", key)
-          end
         end
 
         def instances
