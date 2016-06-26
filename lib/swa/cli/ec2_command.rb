@@ -103,12 +103,11 @@ module Swa
 
       subcommand ["instances", "is"], "list instances" do
 
+        option ["--state"], "STATE", "with specified status",
+               :default => "running"
+
         option "--named", "NAME", "with matching name" do |name|
           add_tag_filter("Name", name)
-        end
-
-        option ["--state"], "STATE", "with specified status" do |state|
-          add_filter("instance-state-name", state)
         end
 
         option ["--image", "--ami"], "IMAGE-ID", "with specified AMI" do |image_id|
@@ -129,8 +128,8 @@ module Swa
         private
 
         def instances
-          options = {}
-          options[:filters] = filters unless filters.empty?
+          add_filter("instance-state-name", state)
+          options = {:filters => filters}
           Swa::EC2::Instance.list(ec2.instances(options))
         end
 
