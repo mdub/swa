@@ -6,6 +6,7 @@ require "swa/cli/tag_filter_options"
 require "swa/ec2/key_pair"
 require "swa/ec2/image"
 require "swa/ec2/instance"
+require "swa/ec2/security_group"
 
 module Swa
   module CLI
@@ -37,7 +38,7 @@ module Swa
 
       subcommand ["instance", "i"], "show instance" do
 
-        parameter "INSTANCE-ID", "instance ID"
+        parameter "INSTANCE-ID", "instance id"
 
         include ItemBehaviour
 
@@ -79,7 +80,7 @@ module Swa
 
       subcommand ["image", "ami"], "show image" do
 
-        parameter "IMAGE-ID", "image ID"
+        parameter "IMAGE-ID", "image id"
 
         include ItemBehaviour
 
@@ -109,7 +110,7 @@ module Swa
 
       subcommand ["key-pair", "kp"], "show key-pair" do
 
-        parameter "NAME", "key-pair NAME"
+        parameter "NAME", "key-pair name"
 
         include ItemBehaviour
 
@@ -120,6 +121,36 @@ module Swa
         end
 
         alias_method :item, :key_pair
+
+      end
+
+      subcommand ["security-groups", "sgs"], "list security-groups" do
+
+        include CollectionBehaviour
+
+        private
+
+        def security_groups
+          Swa::EC2::SecurityGroup.list(ec2.security_groups)
+        end
+
+        alias_method :collection, :security_groups
+
+      end
+
+      subcommand ["security-group", "sg"], "show security-group" do
+
+        parameter "GROUP-ID", "security-group id"
+
+        include ItemBehaviour
+
+        private
+
+        def security_group
+          Swa::EC2::SecurityGroup.new(ec2.security_group(group_id))
+        end
+
+        alias_method :item, :security_group
 
       end
 
