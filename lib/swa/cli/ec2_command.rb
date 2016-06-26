@@ -49,7 +49,7 @@ module Swa
 
       end
 
-      subcommand ["instance", "i"], "list instances" do
+      subcommand ["instance", "i"], "show instance" do
 
         parameter "INSTANCE-ID", "instance ID"
 
@@ -118,6 +118,36 @@ module Swa
           }
           options[:filters] = filters unless filters.empty?
           Swa::EC2::Image.list(ec2.images(options))
+        end
+
+      end
+
+      subcommand ["image", "ami"], "show image" do
+
+        parameter "IMAGE-ID", "image ID"
+
+        self.default_subcommand = "summary"
+
+        subcommand ["summary", "s"], "brief summary (one per line)" do
+
+          def execute
+            puts image.summary
+          end
+
+        end
+
+        subcommand ["detail", "d"], "full details" do
+
+          def execute
+            display_data(image.data)
+          end
+
+        end
+
+        private
+
+        def image
+          Swa::EC2::Image.new(ec2.image(image_id))
         end
 
       end
