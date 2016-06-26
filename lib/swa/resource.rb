@@ -4,6 +4,10 @@ module Swa
 
   class Resource
 
+    def self.list(aws_resources)
+      aws_resources.lazy.map(&method(:new))
+    end
+
     def initialize(aws_resource)
       @aws_resource = aws_resource
     end

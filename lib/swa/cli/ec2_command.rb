@@ -44,7 +44,7 @@ module Swa
         def instances
           options = {}
           options[:filters] = filters unless filters.empty?
-          ec2.instances(options).lazy.map(&Swa::EC2::Instance.method(:new))
+          Swa::EC2::Instance.list(ec2.instances(options))
         end
 
       end
@@ -117,7 +117,7 @@ module Swa
             :owners => [owned_by]
           }
           options[:filters] = filters unless filters.empty?
-          ec2.images(options).lazy.map(&Swa::EC2::Image.method(:new))
+          Swa::EC2::Image.list(ec2.images(options))
         end
 
       end
