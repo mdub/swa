@@ -11,16 +11,12 @@ module Swa
       def summary
         [
           pad(ami.image_id, 13),
-          quoted_name
+          quoted(name)
         ].join(" ")
       end
 
       def name
         ami.name
-      end
-
-      def quoted_name
-        %("#{name}") if name
       end
 
       private

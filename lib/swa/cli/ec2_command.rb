@@ -3,6 +3,7 @@ require "swa/cli/base_command"
 require "swa/cli/collection_behaviour"
 require "swa/cli/item_behaviour"
 require "swa/cli/tag_filter_options"
+require "swa/ec2/key_pair"
 require "swa/ec2/image"
 require "swa/ec2/instance"
 
@@ -89,6 +90,36 @@ module Swa
         end
 
         alias_method :item, :image
+
+      end
+
+      subcommand ["key-pairs", "kps"], "list key-pairs" do
+
+        include CollectionBehaviour
+
+        private
+
+        def key_pairs
+          Swa::EC2::KeyPair.list(ec2.key_pairs)
+        end
+
+        alias_method :collection, :key_pairs
+
+      end
+
+      subcommand ["key-pair", "kp"], "show key-pair" do
+
+        parameter "NAME", "key-pair NAME"
+
+        include ItemBehaviour
+
+        private
+
+        def key_pair
+          Swa::EC2::KeyPair.new(ec2.key_pair(name))
+        end
+
+        alias_method :item, :key_pair
 
       end
 

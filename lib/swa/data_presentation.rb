@@ -4,6 +4,10 @@ module Swa
 
     protected
 
+    def quoted(value)
+      %("#{value}") if value
+    end
+
     def pad(s, width)
       s = (s || "").to_s
       s.ljust(width)

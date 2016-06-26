@@ -16,16 +16,12 @@ module Swa
           pad(i.state.name, 11),
           pad(i.private_ip_address, 15),
           pad(i.public_ip_address, 15),
-          quoted_name
+          quoted(name)
         ].join(" ")
       end
 
       def name
         tags["Name"]
-      end
-
-      def quoted_name
-        %("#{name}") if name
       end
 
       private
