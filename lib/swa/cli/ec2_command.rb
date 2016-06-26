@@ -1,5 +1,7 @@
 require "aws-sdk-resources"
 require "swa/cli/base_command"
+require "swa/cli/collection_behaviour"
+require "swa/cli/item_behaviour"
 require "swa/cli/tag_filter_options"
 require "swa/ec2/image"
 require "swa/ec2/instance"
@@ -14,26 +16,7 @@ module Swa
         option "--named", "NAME", "with matching name"
 
         include TagFilterOptions
-
-        self.default_subcommand = "summary"
-
-        subcommand ["summary", "s"], "brief summary (one per line)" do
-
-          def execute
-            instances.each do |i|
-              puts i.summary
-            end
-          end
-
-        end
-
-        subcommand ["detail", "d"], "full details" do
-
-          def execute
-            display_data(instances.map(&:data).to_a)
-          end
-
-        end
+        include CollectionBehaviour
 
         private
 
@@ -47,35 +30,23 @@ module Swa
           Swa::EC2::Instance.list(ec2.instances(options))
         end
 
+        alias_method :collection, :instances
+
       end
 
       subcommand ["instance", "i"], "show instance" do
 
         parameter "INSTANCE-ID", "instance ID"
 
-        self.default_subcommand = "summary"
-
-        subcommand ["summary", "s"], "brief summary (one per line)" do
-
-          def execute
-            puts instance.summary
-          end
-
-        end
-
-        subcommand ["detail", "d"], "full details" do
-
-          def execute
-            display_data(instance.data)
-          end
-
-        end
+        include ItemBehaviour
 
         private
 
         def instance
           Swa::EC2::Instance.new(ec2.instance(instance_id))
         end
+
+        alias_method :item, :instance
 
       end
 
@@ -85,26 +56,7 @@ module Swa
         option "--named", "PATTERN", "limit to those with matching name"
 
         include TagFilterOptions
-
-        self.default_subcommand = "summary"
-
-        subcommand ["summary", "s"], "brief summary (one per line)" do
-
-          def execute
-            images.each do |i|
-              puts i.summary
-            end
-          end
-
-        end
-
-        subcommand ["detail", "d"], "full details" do
-
-          def execute
-            display_data(images.map(&:data).to_a)
-          end
-
-        end
+        include CollectionBehaviour
 
         private
 
@@ -120,35 +72,23 @@ module Swa
           Swa::EC2::Image.list(ec2.images(options))
         end
 
+        alias_method :collection, :images
+
       end
 
       subcommand ["image", "ami"], "show image" do
 
         parameter "IMAGE-ID", "image ID"
 
-        self.default_subcommand = "summary"
-
-        subcommand ["summary", "s"], "brief summary (one per line)" do
-
-          def execute
-            puts image.summary
-          end
-
-        end
-
-        subcommand ["detail", "d"], "full details" do
-
-          def execute
-            display_data(image.data)
-          end
-
-        end
+        include ItemBehaviour
 
         private
 
         def image
           Swa::EC2::Image.new(ec2.image(image_id))
         end
+
+        alias_method :item, :image
 
       end
 

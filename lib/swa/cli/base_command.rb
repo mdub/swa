@@ -34,8 +34,6 @@ module Swa
         }.reject { |_k, v| v.nil? }
       end
 
-      protected
-
       def parse(arguments)
         if arguments.first =~ /^(\w+)-[0-9a-f]+$/
           arguments = [$1] + arguments if self.class.find_subcommand($1)
