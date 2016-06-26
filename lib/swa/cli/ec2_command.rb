@@ -107,7 +107,15 @@ module Swa
           add_tag_filter("Name", name)
         end
 
-        option ["--security-group", "--sg"], "GROUP-ID", "security-group id" do |group|
+        option ["--state"], "STATE", "with specified status" do |state|
+          add_filter("instance-state-name", state)
+        end
+
+        option ["--image", "--ami"], "IMAGE-ID", "with specified AMI" do |image_id|
+          add_filter("image-id", image_id)
+        end
+
+        option ["--group", "--sg"], "GROUP-ID", "in specified security-group" do |group|
           if group =~ /^sg-/
             add_filter("instance.group-id", group)
           else
