@@ -13,42 +13,49 @@ module Swa
 
     class Ec2Command < BaseCommand
 
-      subcommand ["instances", "is"], "list instances" do
+      subcommand ["key-pair", "kp"], "show key-pair" do
 
-        option "--named", "NAME", "with matching name"
-
-        include TagFilterOptions
-        include CollectionBehaviour
-
-        private
-
-        def named=(name)
-          add_tag_filter("Name", name)
-        end
-
-        def instances
-          options = {}
-          options[:filters] = filters unless filters.empty?
-          Swa::EC2::Instance.list(ec2.instances(options))
-        end
-
-        alias_method :collection, :instances
-
-      end
-
-      subcommand ["instance", "i"], "show instance" do
-
-        parameter "INSTANCE-ID", "instance id"
+        parameter "NAME", "key-pair name"
 
         include ItemBehaviour
 
         private
 
-        def instance
-          Swa::EC2::Instance.new(ec2.instance(instance_id))
+        def key_pair
+          Swa::EC2::KeyPair.new(ec2.key_pair(name))
         end
 
-        alias_method :item, :instance
+        alias_method :item, :key_pair
+
+      end
+
+      subcommand ["key-pairs", "kps"], "list key-pairs" do
+
+        include CollectionBehaviour
+
+        private
+
+        def key_pairs
+          Swa::EC2::KeyPair.list(ec2.key_pairs)
+        end
+
+        alias_method :collection, :key_pairs
+
+      end
+
+      subcommand ["image", "ami"], "show image" do
+
+        parameter "IMAGE-ID", "image id"
+
+        include ItemBehaviour
+
+        private
+
+        def image
+          Swa::EC2::Image.new(ec2.image(image_id))
+        end
+
+        alias_method :item, :image
 
       end
 
@@ -78,63 +85,42 @@ module Swa
 
       end
 
-      subcommand ["image", "ami"], "show image" do
+      subcommand ["instance", "i"], "show instance" do
 
-        parameter "IMAGE-ID", "image id"
-
-        include ItemBehaviour
-
-        private
-
-        def image
-          Swa::EC2::Image.new(ec2.image(image_id))
-        end
-
-        alias_method :item, :image
-
-      end
-
-      subcommand ["key-pairs", "kps"], "list key-pairs" do
-
-        include CollectionBehaviour
-
-        private
-
-        def key_pairs
-          Swa::EC2::KeyPair.list(ec2.key_pairs)
-        end
-
-        alias_method :collection, :key_pairs
-
-      end
-
-      subcommand ["key-pair", "kp"], "show key-pair" do
-
-        parameter "NAME", "key-pair name"
+        parameter "INSTANCE-ID", "instance id"
 
         include ItemBehaviour
 
         private
 
-        def key_pair
-          Swa::EC2::KeyPair.new(ec2.key_pair(name))
+        def instance
+          Swa::EC2::Instance.new(ec2.instance(instance_id))
         end
 
-        alias_method :item, :key_pair
+        alias_method :item, :instance
 
       end
 
-      subcommand ["security-groups", "sgs"], "list security-groups" do
+      subcommand ["instances", "is"], "list instances" do
 
+        option "--named", "NAME", "with matching name"
+
+        include TagFilterOptions
         include CollectionBehaviour
 
         private
 
-        def security_groups
-          Swa::EC2::SecurityGroup.list(ec2.security_groups)
+        def named=(name)
+          add_tag_filter("Name", name)
         end
 
-        alias_method :collection, :security_groups
+        def instances
+          options = {}
+          options[:filters] = filters unless filters.empty?
+          Swa::EC2::Instance.list(ec2.instances(options))
+        end
+
+        alias_method :collection, :instances
 
       end
 
@@ -151,6 +137,23 @@ module Swa
         end
 
         alias_method :item, :security_group
+
+      end
+
+      subcommand ["security-groups", "sgs"], "list security-groups" do
+
+        include TagFilterOptions
+        include CollectionBehaviour
+
+        private
+
+        def security_groups
+          options = {}
+          options[:filters] = filters unless filters.empty?
+          Swa::EC2::SecurityGroup.list(ec2.security_groups(options))
+        end
+
+        alias_method :collection, :security_groups
 
       end
 
