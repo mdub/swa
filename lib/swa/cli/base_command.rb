@@ -9,7 +9,7 @@ module Swa
 
     class BaseCommand < Clamp::Command
 
-      option ["--region"], "REGION", "AWS region"
+      option "--region", "REGION", "AWS region"
       option "--access-key", "KEY", "AWS access key",
              :attribute_name => :access_key_id
       option "--secret-key", "KEY", "AWS secret key",
@@ -17,7 +17,18 @@ module Swa
       option "--session-token", "KEY", "AWS security token",
              :attribute_name => :session_token
 
-      option ["-Y", "--yaml"], :flag, "output data in YAML format"
+      option "--format", "FORMAT", "format for data output",
+             :attribute_name => :output_format,
+             :environment_variable => "SWA_OUTPUT_FORMAT",
+             :default => "YAML"
+
+      option ["--json", "-J"], :flag, "output data in JSON format" do
+        self.output_format = "JSON"
+      end
+
+      option ["--yaml", "-Y"], :flag, "output data in YAML format" do
+        self.output_format = "YAML"
+      end
 
       option ["--debug"], :flag, "enable debugging"
 
@@ -58,11 +69,22 @@ module Swa
         super(arguments)
       end
 
+      def output_format=(arg)
+        arg = arg.upcase
+        unless %w(JSON YAML).member?(arg)
+          raise ArgumentError, "unrecognised data format: #{arg.inspect}"
+        end
+        @format = arg
+      end
+
       def format_data(data)
-        if yaml?
+        case output_format
+        when "JSON"
+          MultiJson.dump(data, :pretty => true)
+        when "YAML"
           YAML.dump(data)
         else
-          MultiJson.dump(data, :pretty => true)
+          raise "bad output format: #{output_format}"
         end
       end
 
