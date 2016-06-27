@@ -65,6 +65,8 @@ module Swa
           data = JMESPath.search(jmespath_expression, data)
         end
         puts format_data(data)
+      rescue JMESPath::Errors::SyntaxError => e
+        signal_error("invalid JMESPath expression")
       end
 
     end
