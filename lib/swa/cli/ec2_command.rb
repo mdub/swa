@@ -91,6 +91,24 @@ module Swa
 
         include ItemBehaviour
 
+        subcommand ["console-output", "console"], "Display console output" do
+
+          def execute
+            puts instance.console_output
+          end
+
+        end
+
+        %w(stop start reboot terminate).each do |action|
+          class_eval <<-RUBY
+            subcommand "#{action}", "#{action.capitalize} the instance" do
+              def execute
+                instance.#{action}
+              end
+            end
+          RUBY
+        end
+
         private
 
         def instance
