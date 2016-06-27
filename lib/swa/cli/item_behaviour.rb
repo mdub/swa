@@ -5,8 +5,6 @@ module Swa
 
       def self.included(target)
 
-        target.default_subcommand = "summary"
-
         target.subcommand ["summary", "s"], "One-line summary" do
           def execute
             puts item.summary
