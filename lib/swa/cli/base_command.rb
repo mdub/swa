@@ -31,6 +31,12 @@ module Swa
 
       protected
 
+      def parse_subcommand
+        return false unless self.class.has_subcommands?
+        request_help if subcommand_name == "?"
+        super
+      end
+
       def logger
         @logger ||= ConsoleLogger.new($stderr, debug?)
       end
