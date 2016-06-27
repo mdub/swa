@@ -7,7 +7,7 @@ module Swa
 
         target.default_subcommand = "summary"
 
-        target.subcommand ["summary", "s"], "brief summary (one per line)" do
+        target.subcommand ["summary", "s"], "One-line summary" do
           def execute
             collection.each do |i|
               puts i.summary
@@ -15,7 +15,7 @@ module Swa
           end
         end
 
-        target.subcommand ["data", "d"], "full details" do
+        target.subcommand ["data", "d"], "Full details" do
 
           parameter "[QUERY]", "JMESPath expression"
 

@@ -13,7 +13,7 @@ module Swa
 
     class Ec2Command < BaseCommand
 
-      subcommand ["key-pair", "kp"], "show key-pair" do
+      subcommand ["key-pair", "kp"], "Show key-pair" do
 
         parameter "NAME", "key-pair name"
 
@@ -29,7 +29,7 @@ module Swa
 
       end
 
-      subcommand ["key-pairs", "kps"], "list key-pairs" do
+      subcommand ["key-pairs", "kps"], "List key-pairs" do
 
         include CollectionBehaviour
 
@@ -43,7 +43,7 @@ module Swa
 
       end
 
-      subcommand ["image", "ami"], "show image" do
+      subcommand ["image", "ami"], "Show image" do
 
         parameter "IMAGE-ID", "image id"
 
@@ -59,10 +59,10 @@ module Swa
 
       end
 
-      subcommand ["images", "amis"], "list images" do
+      subcommand ["images", "amis"], "List images" do
 
-        option "--owned-by", "OWNER", "limit to those with selected owner", :default => "self"
-        option "--named", "PATTERN", "limit to those with matching name"
+        option "--owned-by", "OWNER", "with specified owner", :default => "self"
+        option "--named", "PATTERN", "with matching name"
 
         include TagFilterOptions
         include CollectionBehaviour
@@ -85,7 +85,7 @@ module Swa
 
       end
 
-      subcommand ["instance", "i"], "show instance" do
+      subcommand ["instance", "i"], "Show instance" do
 
         parameter "INSTANCE-ID", "instance id"
 
@@ -119,7 +119,7 @@ module Swa
 
       end
 
-      subcommand ["instances", "is"], "list instances" do
+      subcommand ["instances", "is"], "List instances" do
 
         option ["--state"], "STATE", "with specified status",
                :default => "running"
@@ -167,7 +167,7 @@ module Swa
 
       end
 
-      subcommand ["security-group", "sg"], "show security-group" do
+      subcommand ["security-group", "sg"], "Show security-group" do
 
         parameter "GROUP-ID", "security-group id"
 
@@ -183,7 +183,7 @@ module Swa
 
       end
 
-      subcommand ["security-groups", "sgs"], "list security-groups" do
+      subcommand ["security-groups", "sgs"], "List security-groups" do
 
         include TagFilterOptions
         include CollectionBehaviour
