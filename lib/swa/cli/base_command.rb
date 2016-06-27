@@ -21,6 +21,14 @@ module Swa
 
       option ["--debug"], :flag, "enable debugging"
 
+      def run(arguments)
+        super(arguments)
+      rescue Aws::Errors::MissingCredentialsError
+        signal_error "no credentials provided"
+      rescue Aws::Errors::ServiceError => e
+        signal_error e.message
+      end
+
       protected
 
       def logger
