@@ -143,6 +143,18 @@ module Swa
         include TagFilterOptions
         include CollectionBehaviour
 
+        %w(stop start reboot terminate).each do |action|
+          class_eval <<-RUBY
+            subcommand "#{action}", "#{action.capitalize} all instances" do
+              def execute
+                instances.each do |i|
+                  i.#{action}
+                end
+              end
+            end
+          RUBY
+        end
+
         private
 
         def instances
