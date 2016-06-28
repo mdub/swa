@@ -7,6 +7,7 @@ require "swa/ec2/key_pair"
 require "swa/ec2/image"
 require "swa/ec2/instance"
 require "swa/ec2/security_group"
+require "swa/ec2/volume"
 
 module Swa
   module CLI
@@ -197,6 +198,39 @@ module Swa
         end
 
         alias_method :collection, :security_groups
+
+      end
+
+      subcommand ["volume", "vol", "v"], "Show volume" do
+
+        parameter "VOLUME-ID", "volume id"
+
+        include ItemBehaviour
+
+        private
+
+        def volume
+          Swa::EC2::Volume.new(ec2.volume(volume_id))
+        end
+
+        alias_method :item, :volume
+
+      end
+
+      subcommand ["volumes", "vs"], "List volumes" do
+
+        include TagFilterOptions
+        include CollectionBehaviour
+
+        private
+
+        def volumes
+          options = {}
+          options[:filters] = filters unless filters.empty?
+          Swa::EC2::Volume.list(ec2.volumes(options))
+        end
+
+        alias_method :collection, :volumes
 
       end
 
