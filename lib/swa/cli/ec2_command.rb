@@ -33,6 +33,10 @@ module Swa
 
       subcommand ["key-pairs", "kps"], "List key-pairs" do
 
+        self.description = <<-EOF
+          List key-pairs.
+        EOF
+
         include CollectionBehaviour
 
         private
@@ -62,6 +66,13 @@ module Swa
       end
 
       subcommand ["images", "amis"], "List images" do
+
+        self.description = <<-EOF
+          List images (AMIs).
+
+          By default only AMIs owned by the current account are listed;
+          use `--owned-by` to select a different scope.
+        EOF
 
         option "--owned-by", "OWNER", "with specified owner", :default => "self"
         option "--named", "PATTERN", "with matching name"
@@ -136,6 +147,13 @@ module Swa
       end
 
       subcommand ["instances", "is"], "List instances" do
+
+        self.description = <<-EOF
+          List images (AMIs).
+
+          By default only runnning instances are listed;
+          use `--state` to override ('*' for all states).
+        EOF
 
         option ["--state"], "STATE", "with specified status",
                :default => "running"
@@ -248,6 +266,13 @@ module Swa
 
       subcommand ["snapshots", "snaps"], "List snapshots" do
 
+        self.description = <<-EOF
+          List EBS snapshots.
+
+          By default only snapshots owned by the current account are listed;
+          use `--owned-by` to select a different scope.
+        EOF
+
         option "--owned-by", "OWNER", "with specified owner", :default => "self"
 
         include TagFilterOptions
@@ -281,6 +306,10 @@ module Swa
       end
 
       subcommand ["volumes", "vols"], "List volumes" do
+
+        self.description = <<-EOF
+          List EBS volumes.
+        EOF
 
         include TagFilterOptions
         include CollectionBehaviour
