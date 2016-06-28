@@ -11,14 +11,14 @@ module Swa
 
       def summary
         [
-          pad(v.volume_id, 13),
-          pad(v.snapshot_id, 14),
-          sprintf("%5d", v.size),
-          pad(v.volume_type, 10),
-          pad(attachment.instance_id, 11),
-          pad(attachment.device, 10),
+          pad(v.volume_id, 12),
+          pad(v.snapshot_id, 13),
+          sprintf("%4d", v.size),
+          pad(v.volume_type, 9),
+          pad(attachment.instance_id, 10),
+          pad(attachment.device, 9),
           quoted(name)
-        ].join(" ")
+        ].join("  ")
       end
 
       def name

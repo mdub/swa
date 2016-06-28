@@ -8,10 +8,10 @@ module Swa
 
       def summary
         [
-          pad(sg.group_id, 12),
-          pad(sg.vpc_id, 13),
+          pad(sg.group_id, 11),
+          pad(sg.vpc_id, 12),
           quoted(sg.group_name)
-        ].join(" ")
+        ].join("  ")
       end
 
       def name

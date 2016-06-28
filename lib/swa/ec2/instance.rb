@@ -11,14 +11,14 @@ module Swa
 
       def summary
         [
-          pad(i.instance_id, 11),
-          pad(i.image_id, 13),
+          pad(i.instance_id, 10),
+          pad(i.image_id, 12),
           pad(i.instance_type, 10),
-          pad(i.state.name, 11),
-          pad(i.private_ip_address, 15),
-          pad(i.public_ip_address, 15),
+          pad(i.state.name, 10),
+          pad(i.private_ip_address, 14),
+          pad(i.public_ip_address, 14),
           quoted(name)
-        ].join(" ")
+        ].join("  ")
       end
 
       def name

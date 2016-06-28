@@ -10,9 +10,10 @@ module Swa
 
       def summary
         [
-          pad(ami.image_id, 13),
+          pad(ami.image_id, 12),
+          ami.creation_date.sub(".000Z", "Z"),
           quoted(name)
-        ].join(" ")
+        ].join("  ")
       end
 
       def name
