@@ -11,6 +11,9 @@ module Swa
 
       option "--tagged", "KEY[=VALUE]", "with matching tag",
              :multivalued => true, :attribute_name => :tag_list
+      option "--not-tagged", "KEY[=VALUE]", "WITHOUT matching tag",
+             :multivalued => true, :attribute_name => :tag_blacklist
+
       option "--stack", "NAME", "from the named CloudFormation stack"
 
       protected
@@ -18,6 +21,20 @@ module Swa
       def append_to_tag_list(arg)
         key, value_pattern = arg.split("=", 2)
         add_tag_filter(key, value_pattern)
+      end
+
+      def append_to_tag_blacklist(arg)
+        key, value_pattern = arg.split("=", 2)
+        if value_pattern
+          selector.add do |resource|
+            value = resource.tags[key]
+            value.nil? || !File.fnmatch(value_pattern, value)
+          end
+        else
+          selector.add do |resource|
+            resource.tags[key].nil?
+          end
+        end
       end
 
       def stack=(name)
