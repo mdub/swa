@@ -74,7 +74,7 @@ module Swa
         unless %w(JSON YAML).member?(arg)
           raise ArgumentError, "unrecognised data format: #{arg.inspect}"
         end
-        @format = arg
+        @output_format = arg
       end
 
       def format_data(data)
