@@ -1,3 +1,4 @@
+require "chronic"
 require "clamp"
 require "console_logger"
 require "jmespath"
@@ -95,6 +96,12 @@ module Swa
         puts format_data(data)
       rescue JMESPath::Errors::SyntaxError => e
         signal_error("invalid JMESPath expression")
+      end
+
+      def parse_datetime(datetime_string)
+        result = Chronic.parse(datetime_string, :guess => false, :endian_precedence => :little)
+        raise ArgumentError, "unrecognised date/time #{datetime_string.inspect}" unless result
+        result
       end
 
     end

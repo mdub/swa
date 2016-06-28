@@ -25,6 +25,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 3.0"
 
   spec.add_runtime_dependency "aws-sdk-resources"
+  spec.add_runtime_dependency "chronic"
   spec.add_runtime_dependency "clamp"
   spec.add_runtime_dependency "console_logger"
   spec.add_runtime_dependency "multi_json"

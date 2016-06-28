@@ -3,9 +3,9 @@ require "swa/cli/base_command"
 require "swa/cli/collection_behaviour"
 require "swa/cli/item_behaviour"
 require "swa/cli/tag_filter_options"
-require "swa/ec2/key_pair"
 require "swa/ec2/image"
 require "swa/ec2/instance"
+require "swa/ec2/key_pair"
 require "swa/ec2/security_group"
 require "swa/ec2/snapshot"
 require "swa/ec2/volume"
@@ -142,6 +142,9 @@ module Swa
           end
         end
 
+        option ["--launched-after", "--after"], "WHEN", "earliest launch-time"
+        option ["--launched-before", "--before"], "WHEN", "latest launch-time"
+
         include TagFilterOptions
         include CollectionBehaviour
 
@@ -157,12 +160,26 @@ module Swa
           RUBY
         end
 
+        def launched_after=(datetime_string)
+          min_launch_time = parse_datetime(datetime_string).max
+          selector.add do |instance|
+            instance.launch_time > min_launch_time
+          end
+        end
+
+        def launched_before=(datetime_string)
+          max_launch_time = parse_datetime(datetime_string).min
+          selector.add do |instance|
+            instance.launch_time < max_launch_time
+          end
+        end
+
         private
 
         def instances
           add_filter("instance-state-name", state)
           options = {:filters => filters}
-          Swa::EC2::Instance.list(ec2.instances(options))
+          selector.apply(Swa::EC2::Instance.list(ec2.instances(options)))
         end
 
         alias_method :collection, :instances

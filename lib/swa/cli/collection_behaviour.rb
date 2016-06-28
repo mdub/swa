@@ -1,3 +1,5 @@
+require "swa/cli/selector"
+
 module Swa
   module CLI
 
@@ -25,6 +27,10 @@ module Swa
 
         end
 
+      end
+
+      def selector
+        context[:selector] ||= Selector.new
       end
 
     end

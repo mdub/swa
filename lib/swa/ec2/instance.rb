@@ -31,6 +31,7 @@ module Swa
 
       extend Forwardable
 
+      def_delegators :i, :launch_time
       def_delegators :i, :stop, :start, :reboot, :terminate
 
       private
