@@ -66,6 +66,9 @@ module Swa
         option "--owned-by", "OWNER", "with specified owner", :default => "self"
         option "--named", "PATTERN", "with matching name"
 
+        option ["--created-after", "--after"], "WHEN", "earliest creation-date"
+        option ["--created-before", "--before"], "WHEN", "latest creation-date"
+
         include TagFilterOptions
         include CollectionBehaviour
 
@@ -75,12 +78,26 @@ module Swa
           add_filter("name", name_pattern)
         end
 
+        def created_after=(datetime_string)
+          min_creation_date = parse_datetime(datetime_string).max
+          selector.add do |image|
+            Time.parse(image.creation_date) > min_creation_date
+          end
+        end
+
+        def created_before=(datetime_string)
+          max_creation_date = parse_datetime(datetime_string).min
+          selector.add do |image|
+            Time.parse(image.creation_date) < max_creation_date
+          end
+        end
+
         def images
           options = {
             :owners => [owned_by]
           }
           options[:filters] = filters unless filters.empty?
-          Swa::EC2::Image.list(ec2.images(options))
+          selector.apply(Swa::EC2::Image.list(ec2.images(options)))
         end
 
         alias_method :collection, :images
