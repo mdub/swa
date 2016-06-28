@@ -7,7 +7,7 @@ module Swa
 
       def summary
         [
-          pad(name, 4),
+          pad(name, 44),
           aws_resource.key_fingerprint
         ].join("  ")
       end
