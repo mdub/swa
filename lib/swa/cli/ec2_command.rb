@@ -229,7 +229,7 @@ module Swa
         def security_groups
           options = {}
           options[:filters] = filters unless filters.empty?
-          Swa::EC2::SecurityGroup.list(ec2.security_groups(options))
+          selector.apply(Swa::EC2::SecurityGroup.list(ec2.security_groups(options)))
         end
 
         alias_method :collection, :security_groups
@@ -266,7 +266,7 @@ module Swa
             :owner_ids => [owned_by]
           }
           options[:filters] = filters unless filters.empty?
-          Swa::EC2::Snapshot.list(ec2.snapshots(options))
+          selector.apply(Swa::EC2::Snapshot.list(ec2.snapshots(options)))
         end
 
         alias_method :collection, :snapshots
@@ -299,7 +299,7 @@ module Swa
         def volumes
           options = {}
           options[:filters] = filters unless filters.empty?
-          Swa::EC2::Volume.list(ec2.volumes(options))
+          selector.apply(Swa::EC2::Volume.list(ec2.volumes(options)))
         end
 
         alias_method :collection, :volumes
