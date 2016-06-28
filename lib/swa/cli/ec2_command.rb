@@ -220,13 +220,17 @@ module Swa
 
       subcommand ["snapshots", "snaps"], "List snapshots" do
 
+        option "--owned-by", "OWNER", "with specified owner", :default => "self"
+
         include TagFilterOptions
         include CollectionBehaviour
 
         private
 
         def snapshots
-          options = {}
+          options = {
+            :owner_ids => [owned_by]
+          }
           options[:filters] = filters unless filters.empty?
           Swa::EC2::Snapshot.list(ec2.snapshots(options))
         end
