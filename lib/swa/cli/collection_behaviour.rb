@@ -33,6 +33,10 @@ module Swa
         context[:selector] ||= Selector.new
       end
 
+      def query_options
+        context[:query_options] ||= {}
+      end
+
     end
 
   end

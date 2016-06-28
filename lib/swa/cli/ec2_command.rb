@@ -38,7 +38,7 @@ module Swa
         private
 
         def key_pairs
-          Swa::EC2::KeyPair.list(ec2.key_pairs)
+          query_for(:key_pairs, Swa::EC2::KeyPair)
         end
 
         alias_method :collection, :key_pairs
@@ -93,11 +93,8 @@ module Swa
         end
 
         def images
-          options = {
-            :owners => [owned_by]
-          }
-          options[:filters] = filters unless filters.empty?
-          selector.apply(Swa::EC2::Image.list(ec2.images(options)))
+          query_options[:owners] = [owned_by]
+          query_for(:images, Swa::EC2::Image)
         end
 
         alias_method :collection, :images
@@ -195,8 +192,7 @@ module Swa
 
         def instances
           add_filter("instance-state-name", state)
-          options = {:filters => filters}
-          selector.apply(Swa::EC2::Instance.list(ec2.instances(options)))
+          query_for(:instances, Swa::EC2::Instance)
         end
 
         alias_method :collection, :instances
@@ -227,9 +223,7 @@ module Swa
         private
 
         def security_groups
-          options = {}
-          options[:filters] = filters unless filters.empty?
-          selector.apply(Swa::EC2::SecurityGroup.list(ec2.security_groups(options)))
+          query_for(:security_groups, Swa::EC2::SecurityGroup)
         end
 
         alias_method :collection, :security_groups
@@ -262,11 +256,8 @@ module Swa
         private
 
         def snapshots
-          options = {
-            :owner_ids => [owned_by]
-          }
-          options[:filters] = filters unless filters.empty?
-          selector.apply(Swa::EC2::Snapshot.list(ec2.snapshots(options)))
+          query_options[:owner_ids] = [owned_by]
+          query_for(:snapshots, Swa::EC2::Snapshot)
         end
 
         alias_method :collection, :snapshots
@@ -297,9 +288,7 @@ module Swa
         private
 
         def volumes
-          options = {}
-          options[:filters] = filters unless filters.empty?
-          selector.apply(Swa::EC2::Volume.list(ec2.volumes(options)))
+          query_for(:volumes, Swa::EC2::Volume)
         end
 
         alias_method :collection, :volumes
@@ -310,6 +299,12 @@ module Swa
 
       def ec2
         ::Aws::EC2::Resource.new(aws_config)
+      end
+
+      def query_for(query_method, resource_model)
+        aws_resources = ec2.public_send(query_method, query_options)
+        wrapped_resources = resource_model.list(aws_resources)
+        selector.apply(wrapped_resources)
       end
 
     end

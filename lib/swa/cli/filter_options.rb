@@ -13,7 +13,7 @@ module Swa
       protected
 
       def filters
-        @filters ||= []
+        query_options[:filters] ||= []
       end
 
       def add_filter(name, *values)
