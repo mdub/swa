@@ -201,7 +201,7 @@ module Swa
 
       end
 
-      subcommand ["volume", "vol", "v"], "Show volume" do
+      subcommand ["volume", "vol"], "Show volume" do
 
         parameter "VOLUME-ID", "volume id"
 
@@ -217,7 +217,7 @@ module Swa
 
       end
 
-      subcommand ["volumes", "vs"], "List volumes" do
+      subcommand ["volumes", "vols"], "List volumes" do
 
         include TagFilterOptions
         include CollectionBehaviour
