@@ -13,6 +13,11 @@ module Swa
       s.ljust(width)
     end
 
+    def rpad(s, width)
+      s = (s || "").to_s
+      s.rjust(width)
+    end
+
     def camelize_keys(data)
       case data
       when Hash

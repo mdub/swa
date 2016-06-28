@@ -7,6 +7,7 @@ require "swa/ec2/key_pair"
 require "swa/ec2/image"
 require "swa/ec2/instance"
 require "swa/ec2/security_group"
+require "swa/ec2/snapshot"
 require "swa/ec2/volume"
 
 module Swa
@@ -198,6 +199,39 @@ module Swa
         end
 
         alias_method :collection, :security_groups
+
+      end
+
+      subcommand ["snapshot", "snap"], "Show snapshot" do
+
+        parameter "SNAPSHOT-ID", "snapshot id"
+
+        include ItemBehaviour
+
+        private
+
+        def snapshot
+          Swa::EC2::Snapshot.new(ec2.snapshot(snapshot_id))
+        end
+
+        alias_method :item, :snapshot
+
+      end
+
+      subcommand ["snapshots", "snaps"], "List snapshots" do
+
+        include TagFilterOptions
+        include CollectionBehaviour
+
+        private
+
+        def snapshots
+          options = {}
+          options[:filters] = filters unless filters.empty?
+          Swa::EC2::Snapshot.list(ec2.snapshots(options))
+        end
+
+        alias_method :collection, :snapshots
 
       end
 
