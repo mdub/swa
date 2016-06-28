@@ -1,4 +1,3 @@
-require "forwardable"
 require "swa/resource"
 require "swa/ec2/tagged_resource"
 
@@ -20,9 +19,7 @@ module Swa
         ].join("  ")
       end
 
-      extend Forwardable
-
-      def_delegators :s, :delete
+      delegate :delete
 
       private
 

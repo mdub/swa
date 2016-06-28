@@ -1,3 +1,4 @@
+require "forwardable"
 require "swa/data_presentation"
 
 module Swa
@@ -19,6 +20,12 @@ module Swa
 
     def data
       camelize_keys(_resource_.data.to_h)
+    end
+
+    extend Forwardable
+
+    def self.delegate(*methods)
+      def_delegators :aws_resource, *methods
     end
 
   end

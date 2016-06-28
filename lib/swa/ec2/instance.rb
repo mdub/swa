@@ -1,4 +1,3 @@
-require "forwardable"
 require "swa/resource"
 require "swa/ec2/tagged_resource"
 
@@ -29,10 +28,8 @@ module Swa
         i.console_output.output
       end
 
-      extend Forwardable
-
-      def_delegators :i, :launch_time
-      def_delegators :i, :stop, :start, :reboot, :terminate
+      delegate :launch_time
+      delegate :stop, :start, :reboot, :terminate
 
       private
 

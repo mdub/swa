@@ -1,4 +1,3 @@
-require "forwardable"
 require "swa/resource"
 require "swa/ec2/tagged_resource"
 
@@ -29,9 +28,7 @@ module Swa
         v.attachments.first || OpenStruct.new
       end
 
-      extend Forwardable
-
-      def_delegators :v, :delete
+      delegate :delete
 
       private
 

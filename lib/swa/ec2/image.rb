@@ -1,4 +1,3 @@
-require "forwardable"
 require "swa/resource"
 require "swa/ec2/tagged_resource"
 
@@ -21,9 +20,7 @@ module Swa
         ami.name
       end
 
-      extend Forwardable
-
-      def_delegators :ami, :creation_date
+      delegate :creation_date
 
       private
 
