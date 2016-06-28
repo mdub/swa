@@ -1,3 +1,4 @@
+require "base64"
 require "swa/resource"
 require "swa/ec2/tagged_resource"
 
@@ -25,7 +26,7 @@ module Swa
       end
 
       def console_output
-        i.console_output.output
+        Base64.decode64(i.console_output.output)
       end
 
       delegate :launch_time
