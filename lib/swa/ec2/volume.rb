@@ -15,13 +15,13 @@ module Swa
           pad(v.snapshot_id, 14),
           sprintf("%5d", v.size),
           pad(v.volume_type, 10),
-          pad(v.state, 11),
-          quoted(name)
+          pad(attachment.instance_id, 11),
+          attachment.device
         ].join(" ")
       end
 
-      def name
-        tags["Name"]
+      def attachment
+        v.attachments.first || OpenStruct.new
       end
 
       extend Forwardable
