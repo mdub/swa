@@ -16,8 +16,13 @@ module Swa
           sprintf("%5d", v.size),
           pad(v.volume_type, 10),
           pad(attachment.instance_id, 11),
-          attachment.device
+          pad(attachment.device, 10),
+          quoted(name)
         ].join(" ")
+      end
+
+      def name
+        tags["Name"]
       end
 
       def attachment

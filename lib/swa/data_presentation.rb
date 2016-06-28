@@ -5,7 +5,7 @@ module Swa
     protected
 
     def quoted(value)
-      %("#{value}") if value
+      %("#{value}") if value && !value.empty?
     end
 
     def pad(s, width)
