@@ -2,7 +2,9 @@
 
 SWA is AWS, backwards.
 
-It's an alternative CLI for AWS. "Backwards" because commands put verbs at the end:
+It's an alternative CLI for AWS.
+
+"Backwards" because commands put verbs at the end:
 
     $ swa ec2 instance i-9336f049 terminate
 
