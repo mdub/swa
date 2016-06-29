@@ -12,7 +12,7 @@ module Swa
         [
           pad(s.snapshot_id, 13),
           pad(s.volume_id, 12),
-          sprintf("%4d", s.volume_size),
+          sprintf("%5d", s.volume_size),
           s.start_time.iso8601,
           rpad(s.progress, 4),
           quoted(s.description)

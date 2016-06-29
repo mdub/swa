@@ -12,7 +12,7 @@ module Swa
         [
           pad(v.volume_id, 12),
           pad(v.snapshot_id, 13),
-          sprintf("%4d", v.size),
+          sprintf("%5d", v.size),
           pad(v.volume_type, 9),
           pad(attachment.instance_id, 10),
           pad(attachment.device, 9),
