@@ -10,6 +10,7 @@ require "swa/ec2/security_group"
 require "swa/ec2/snapshot"
 require "swa/ec2/subnet"
 require "swa/ec2/volume"
+require "swa/ec2/vpc"
 
 module Swa
   module CLI
@@ -305,6 +306,7 @@ module Swa
         alias_method :item, :subnet
 
       end
+
       subcommand ["subnets"], "List subnets" do
 
         include TagFilterOptions
@@ -352,6 +354,41 @@ module Swa
         end
 
         alias_method :collection, :volumes
+
+      end
+
+      subcommand ["vpc"], "Show vpc" do
+
+        parameter "VPC-ID", "vpc id"
+
+        include ItemBehaviour
+
+        private
+
+        def vpc
+          Swa::EC2::Vpc.new(ec2.vpc(vpc_id))
+        end
+
+        alias_method :item, :vpc
+
+      end
+
+      subcommand ["vpcs"], "List vpcs" do
+
+        include TagFilterOptions
+        include CollectionBehaviour
+
+        option "--named", "NAME", "with matching name" do |name|
+          add_tag_filter("Name", name)
+        end
+
+        private
+
+        def vpcs
+          query_for(:vpcs, Swa::EC2::Vpc)
+        end
+
+        alias_method :collection, :vpcs
 
       end
 
