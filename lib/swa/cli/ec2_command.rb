@@ -8,6 +8,7 @@ require "swa/ec2/instance"
 require "swa/ec2/key_pair"
 require "swa/ec2/security_group"
 require "swa/ec2/snapshot"
+require "swa/ec2/subnet"
 require "swa/ec2/volume"
 
 module Swa
@@ -286,6 +287,21 @@ module Swa
         end
 
         alias_method :collection, :snapshots
+
+      end
+
+      subcommand ["subnets"], "List subnets" do
+
+        include TagFilterOptions
+        include CollectionBehaviour
+
+        private
+
+        def subnets
+          query_for(:subnets, Swa::EC2::Subnet)
+        end
+
+        alias_method :collection, :subnets
 
       end
 
