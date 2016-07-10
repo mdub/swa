@@ -290,6 +290,21 @@ module Swa
 
       end
 
+      subcommand ["subnet"], "Show subnet" do
+
+        parameter "SUBNET-ID", "subnet id"
+
+        include ItemBehaviour
+
+        private
+
+        def subnet
+          Swa::EC2::Subnet.new(ec2.subnet(subnet_id))
+        end
+
+        alias_method :item, :subnet
+
+      end
       subcommand ["subnets"], "List subnets" do
 
         include TagFilterOptions
