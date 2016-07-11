@@ -50,6 +50,17 @@ But you can ask for **all** the data, if you wish:
 
 Specify `-J` if you like JSON better than YAML.
 
+You can specify a [JMESPath](http://jmespath.org) to extract a subset of the data:
+
+    $ swa ec2 instances data '[].{Id:InstanceId,Profile:IamInstanceProfile.Id}'
+    ---
+    - Id: i-7f5495ae
+      Profile: AIPAIDOQKT66MFXRO5BPS
+    - Id: i-9c539e4d
+      Profile: AIPAIRT5GOEJ2ZMVPGGD6
+    - Id: i-fbeda3be
+      Profile: AIPAIZXZFLTUW6L456LFU
+
 ## Inspecting things
 
 Each "collection" operation has a corresponding "item" operation, e.g.
