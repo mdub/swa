@@ -17,40 +17,6 @@ module Swa
 
     class Ec2Command < BaseCommand
 
-      subcommand ["key-pair", "kp"], "Show key-pair" do
-
-        parameter "NAME", "key-pair name"
-
-        include ItemBehaviour
-
-        private
-
-        def key_pair
-          Swa::EC2::KeyPair.new(ec2.key_pair(name))
-        end
-
-        alias_method :item, :key_pair
-
-      end
-
-      subcommand ["key-pairs", "kps"], "List key-pairs" do
-
-        self.description = <<-EOF
-          List key-pairs.
-        EOF
-
-        include CollectionBehaviour
-
-        private
-
-        def key_pairs
-          query_for(:key_pairs, Swa::EC2::KeyPair)
-        end
-
-        alias_method :collection, :key_pairs
-
-      end
-
       subcommand ["image", "ami"], "Show image" do
 
         parameter "IMAGE-ID", "image id"
@@ -216,6 +182,40 @@ module Swa
         end
 
         alias_method :collection, :instances
+
+      end
+
+      subcommand ["key-pair", "kp"], "Show key-pair" do
+
+        parameter "NAME", "key-pair name"
+
+        include ItemBehaviour
+
+        private
+
+        def key_pair
+          Swa::EC2::KeyPair.new(ec2.key_pair(name))
+        end
+
+        alias_method :item, :key_pair
+
+      end
+
+      subcommand ["key-pairs", "kps"], "List key-pairs" do
+
+        self.description = <<-EOF
+          List key-pairs.
+        EOF
+
+        include CollectionBehaviour
+
+        private
+
+        def key_pairs
+          query_for(:key_pairs, Swa::EC2::KeyPair)
+        end
+
+        alias_method :collection, :key_pairs
 
       end
 
