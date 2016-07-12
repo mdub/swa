@@ -3,15 +3,15 @@ require "swa/resource"
 module Swa
   module IAM
 
-    class Role < Resource
+    class User < Resource
 
       def summary
-        role.arn
+        user.arn
       end
 
       private
 
-      alias_method :role, :aws_resource
+      alias_method :user, :aws_resource
 
     end
 

@@ -2,8 +2,8 @@ require "aws-sdk-resources"
 require "swa/cli/base_command"
 require "swa/cli/collection_behaviour"
 require "swa/cli/item_behaviour"
-require "swa/cli/tag_filter_options"
 require "swa/iam/role"
+require "swa/iam/user"
 
 module Swa
   module CLI
@@ -12,14 +12,14 @@ module Swa
 
       subcommand ["role"], "Show role" do
 
-        parameter "ROLE-NAME", "role name"
+        parameter "NAME", "role name/ARN"
 
         include ItemBehaviour
 
         private
 
         def item
-          Swa::IAM::Role.new(iam.role(role_name))
+          Swa::IAM::Role.new(iam.role(File.basename(name)))
         end
 
       end
@@ -36,6 +36,36 @@ module Swa
 
         def collection
           query_for(:roles, Swa::IAM::Role)
+        end
+
+      end
+
+      subcommand ["user"], "Show user" do
+
+        parameter "NAME", "user name/ARN"
+
+        include ItemBehaviour
+
+        private
+
+        def item
+          Swa::IAM::User.new(iam.user(File.basename(name)))
+        end
+
+      end
+
+      subcommand ["users"], "Show users" do
+
+        self.description = <<-EOF
+          List users.
+        EOF
+
+        include CollectionBehaviour
+
+        private
+
+        def collection
+          query_for(:users, Swa::IAM::User)
         end
 
       end
