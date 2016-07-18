@@ -26,7 +26,8 @@ module Swa
       end
 
       def console_output
-        Base64.decode64(i.console_output.output)
+        encoded_output = i.console_output.output
+        Base64.decode64(encoded_output) if encoded_output
       end
 
       delegate :launch_time
