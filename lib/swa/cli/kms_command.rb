@@ -9,6 +9,20 @@ module Swa
 
     class KmsCommand < BaseCommand
 
+      subcommand ["key"], "Show key" do
+
+        parameter "ID", "key ID"
+
+        include ItemBehaviour
+
+        private
+
+        def item
+          Swa::KMS::Key.new(kms_client.describe_key(:key_id => id).key_metadata)
+        end
+
+      end
+
       subcommand ["keys"], "Show keys" do
 
         include CollectionBehaviour
