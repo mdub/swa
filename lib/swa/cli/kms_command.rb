@@ -2,12 +2,25 @@ require "aws-sdk-resources"
 require "swa/cli/base_command"
 require "swa/cli/collection_behaviour"
 require "swa/cli/item_behaviour"
+require "swa/kms/alias"
 require "swa/kms/key"
 
 module Swa
   module CLI
 
     class KmsCommand < BaseCommand
+
+      subcommand ["aliases"], "Show aliases" do
+
+        include CollectionBehaviour
+
+        private
+
+        def collection
+          query_for(:list_aliases, :aliases, Swa::KMS::Alias)
+        end
+
+      end
 
       subcommand ["key"], "Show key" do
 
