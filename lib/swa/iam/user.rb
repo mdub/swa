@@ -6,7 +6,7 @@ module Swa
     class User < Resource
 
       def summary
-        user.arn
+        user.name
       end
 
       private

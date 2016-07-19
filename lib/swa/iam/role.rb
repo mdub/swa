@@ -6,7 +6,7 @@ module Swa
     class Role < Resource
 
       def summary
-        role.arn
+        role.name
       end
 
       private
