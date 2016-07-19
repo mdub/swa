@@ -1,6 +1,7 @@
 require "swa/cli/base_command"
 require "swa/cli/ec2_command"
 require "swa/cli/iam_command"
+require "swa/cli/kms_command"
 
 module Swa
   module CLI
@@ -9,6 +10,7 @@ module Swa
 
       subcommand "ec2", "EC2 stuff", Ec2Command
       subcommand "iam", "IAM stuff", IamCommand
+      subcommand "kms", "KMS stuff", KmsCommand
 
     end
 
