@@ -23,6 +23,18 @@ module Swa
 
         include ItemBehaviour
 
+        subcommand ["delete"], "Delete image and snapshots" do
+          def execute
+            image.delete
+          end
+        end
+
+        subcommand ["deregister"], "Deregister image" do
+          def execute
+            image.deregister
+          end
+        end
+
         private
 
         def image
