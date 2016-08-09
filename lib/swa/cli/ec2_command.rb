@@ -38,7 +38,9 @@ module Swa
         private
 
         def image
-          Swa::EC2::Image.new(ec2.image(image_id))
+          ec2_image = ec2.image(image_id)
+          signal_error "No such image '#{image_id}'" unless ec2_image.exists?
+          Swa::EC2::Image.new(ec2_image)
         end
 
         alias_method :item, :image
