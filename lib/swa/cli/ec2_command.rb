@@ -274,6 +274,12 @@ module Swa
 
         include ItemBehaviour
 
+        subcommand ["delete"], "Delete the snapshot" do
+          def execute
+            snapshot.delete
+          end
+        end
+
         private
 
         def snapshot
