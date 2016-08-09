@@ -16,6 +16,8 @@ module Swa
         aws_resource.name
       end
 
+      delegate :delete
+
     end
 
   end

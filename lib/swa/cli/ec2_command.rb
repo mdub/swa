@@ -191,6 +191,12 @@ module Swa
 
         include ItemBehaviour
 
+        subcommand "delete", "Delete the key-pair" do
+          def execute
+            key_pair.delete
+          end
+        end
+
         private
 
         def key_pair
