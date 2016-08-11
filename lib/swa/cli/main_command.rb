@@ -1,4 +1,5 @@
 require "swa/cli/base_command"
+require "swa/cli/cloud_formation_command"
 require "swa/cli/ec2_command"
 require "swa/cli/iam_command"
 require "swa/cli/kms_command"
@@ -9,6 +10,7 @@ module Swa
 
     class MainCommand < BaseCommand
 
+      subcommand ["cf", "cloudformation"], "CloudFormation stuff", CloudFormationCommand
       subcommand "ec2", "EC2 stuff", Ec2Command
       subcommand "iam", "IAM stuff", IamCommand
       subcommand "kms", "KMS stuff", KmsCommand
