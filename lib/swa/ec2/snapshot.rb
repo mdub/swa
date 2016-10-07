@@ -10,8 +10,8 @@ module Swa
 
       def summary
         [
-          pad(s.snapshot_id, 13),
-          pad(s.volume_id, 12),
+          pad(s.snapshot_id, 22),
+          pad(s.volume_id, 21),
           sprintf("%5d", s.volume_size),
           s.start_time.iso8601,
           rpad(s.progress, 4),

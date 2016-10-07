@@ -11,7 +11,7 @@ module Swa
 
       def summary
         [
-          pad(i.instance_id, 10),
+          pad(i.instance_id, 19),
           pad(i.image_id, 12),
           pad(i.instance_type, 10),
           pad(i.state.name, 10),
