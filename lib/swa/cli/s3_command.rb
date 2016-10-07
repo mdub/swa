@@ -10,6 +10,28 @@ module Swa
 
     class S3Command < BaseCommand
 
+      subcommand ["bucket"], "Show bucket" do
+
+        parameter "NAME", "bucket name"
+
+        include ItemBehaviour
+
+        private
+
+        def item
+          Swa::S3::Bucket.new(s3.bucket(name))
+        end
+
+        subcommand "policy", "print bucket policy" do
+
+          def execute
+            puts item.policy
+          end
+
+        end
+
+      end
+
       subcommand ["buckets"], "List buckets" do
 
         include TagFilterOptions

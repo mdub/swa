@@ -10,6 +10,10 @@ module Swa
         bucket.name
       end
 
+      def policy
+        bucket.policy.policy.read
+      end
+
       private
 
       alias_method :bucket, :aws_resource
