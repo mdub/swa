@@ -10,11 +10,11 @@ module Swa
 
       def summary
         [
-          pad(v.volume_id, 21),
-          pad(v.snapshot_id, 22),
+          field(v, :volume_id),
+          field(v, :snapshot_id),
           sprintf("%5d", v.size),
-          pad(v.volume_type, 9),
-          pad(attachment.instance_id, 19),
+          field(v, :volume_type),
+          field(attachment, :instance_id),
           pad(attachment.device, 9),
           quoted(name)
         ].join("  ")

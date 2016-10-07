@@ -10,9 +10,9 @@ module Swa
 
       def summary
         [
-          pad(vpc.vpc_id, 12),
+          field(vpc, :vpc_id),
           pad(default_marker, 1),
-          pad(vpc.cidr_block, 18),
+          field(vpc, :cidr_block),
           quoted(name)
         ].join("  ")
       end

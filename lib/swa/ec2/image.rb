@@ -10,7 +10,7 @@ module Swa
 
       def summary
         [
-          pad(ami.image_id, 12),
+          field(ami, :image_id),
           ami.creation_date.sub(".000Z", "Z"),
           quoted(name)
         ].join("  ")

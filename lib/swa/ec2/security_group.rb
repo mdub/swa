@@ -8,8 +8,8 @@ module Swa
 
       def summary
         [
-          pad(sg.group_id, 11),
-          pad(sg.vpc_id, 12),
+          field(sg, :group_id),
+          field(sg, :vpc_id),
           quoted(sg.group_name)
         ].join("  ")
       end

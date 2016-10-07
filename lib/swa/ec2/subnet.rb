@@ -10,10 +10,10 @@ module Swa
 
       def summary
         [
-          pad(subnet.subnet_id, 15),
-          pad(subnet.vpc_id, 12),
-          pad(subnet.availability_zone, 15),
-          pad(subnet.cidr_block, 18),
+          field(subnet, :subnet_id),
+          field(subnet, :vpc_id),
+          field(subnet, :availability_zone),
+          field(subnet, :cidr_block),
           quoted(name)
         ].join("  ")
       end
