@@ -17,10 +17,14 @@ module Swa
 
         include ItemBehaviour
 
-        private
+        protected
+
+        def aws_bucket
+          s3.bucket(bucket_name)
+        end
 
         def bucket
-          Swa::S3::Bucket.new(s3.bucket(bucket_name))
+          Swa::S3::Bucket.new(aws_bucket)
         end
 
         alias_method :item, :bucket
@@ -40,9 +44,24 @@ module Swa
           protected
 
           def collection
-            aws_bucket = s3.bucket(bucket_name)
             Swa::S3::Object.list(aws_bucket.objects)
           end
+
+        end
+
+        subcommand "object", "Show object" do
+
+          parameter "KEY", "object key", :attribute_name => :object_key
+
+          include ItemBehaviour
+
+          protected
+
+          def object
+            Swa::S3::Object.new(aws_bucket.object(object_key))
+          end
+
+          alias_method :item, :object
 
         end
 
