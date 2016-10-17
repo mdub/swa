@@ -29,9 +29,14 @@ module Swa
       end
 
       def parse(arguments)
-        if arguments.first =~ /^(\w+)-/
+        case arguments.first
+        when /^(\w+)-/
           subcommand = subcommand_for_prefix($1)
           arguments = [subcommand] + arguments if subcommand
+        when %r{^s3://([^/]+)/?$}
+          arguments[0, 1] = ["s3", "bucket", $1]
+        when %r{^s3://([^/]+)/(.+)$}
+          arguments[0, 1] = ["s3", "bucket", $1, "object", $2]
         end
         super(arguments)
       end
