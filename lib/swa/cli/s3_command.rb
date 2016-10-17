@@ -4,23 +4,26 @@ require "swa/cli/collection_behaviour"
 require "swa/cli/item_behaviour"
 require "swa/cli/tag_filter_options"
 require "swa/s3/bucket"
+require "swa/s3/object"
 
 module Swa
   module CLI
 
     class S3Command < BaseCommand
 
-      subcommand ["bucket"], "Show bucket" do
+      subcommand "bucket", "Show bucket" do
 
-        parameter "NAME", "bucket name"
+        parameter "NAME", "bucket name", :attribute_name => :bucket_name
 
         include ItemBehaviour
 
         private
 
-        def item
-          Swa::S3::Bucket.new(s3.bucket(name))
+        def bucket
+          Swa::S3::Bucket.new(s3.bucket(bucket_name))
         end
+
+        alias_method :item, :bucket
 
         subcommand "policy", "print bucket policy" do
 
@@ -30,11 +33,23 @@ module Swa
 
         end
 
+        subcommand "objects", "List objects" do
+
+          include CollectionBehaviour
+
+          protected
+
+          def collection
+            aws_bucket = s3.bucket(bucket_name)
+            Swa::S3::Object.list(aws_bucket.objects)
+          end
+
+        end
+
       end
 
-      subcommand ["buckets"], "List buckets" do
+      subcommand "buckets", "List buckets" do
 
-        include TagFilterOptions
         include CollectionBehaviour
 
         private
@@ -53,7 +68,7 @@ module Swa
 
       def query_for(query_method, resource_model)
         aws_resources = s3.public_send(query_method)
-        wrapped_resources = resource_model.list(aws_resources)
+        resource_model.list(aws_resources)
       end
 
     end
