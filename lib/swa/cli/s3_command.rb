@@ -33,11 +33,19 @@ module Swa
 
         alias_method :item, :bucket
 
-        subcommand "policy", "print bucket policy" do
+        subcommand "object", "Show object" do
 
-          def execute
-            display_data(bucket.policy_data)
+          parameter "KEY", "object key", :attribute_name => :object_key
+
+          include ItemBehaviour
+
+          protected
+
+          def object
+            Swa::S3::Object.new(aws_bucket.object(object_key))
           end
+
+          alias_method :item, :object
 
         end
 
@@ -53,19 +61,11 @@ module Swa
 
         end
 
-        subcommand "object", "Show object" do
+        subcommand "policy", "print bucket policy" do
 
-          parameter "KEY", "object key", :attribute_name => :object_key
-
-          include ItemBehaviour
-
-          protected
-
-          def object
-            Swa::S3::Object.new(aws_bucket.object(object_key))
+          def execute
+            display_data(bucket.policy_data)
           end
-
-          alias_method :item, :object
 
         end
 
