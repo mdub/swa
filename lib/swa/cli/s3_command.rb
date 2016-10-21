@@ -27,6 +27,10 @@ module Swa
           Swa::S3::Bucket.new(aws_bucket)
         end
 
+        def bucket_name=(arg)
+          @bucket_name = arg.sub(%r{^s3://}, "")
+        end
+
         alias_method :item, :bucket
 
         subcommand "policy", "print bucket policy" do
