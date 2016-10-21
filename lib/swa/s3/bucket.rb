@@ -1,3 +1,4 @@
+require "multi_json"
 require "swa/resource"
 
 module Swa
@@ -9,8 +10,12 @@ module Swa
         bucket.name
       end
 
-      def policy
+      def policy_json
         bucket.policy.policy.read
+      end
+
+      def policy_data
+        MultiJson.load(policy_json)
       end
 
       private

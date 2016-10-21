@@ -32,7 +32,7 @@ module Swa
         subcommand "policy", "print bucket policy" do
 
           def execute
-            puts item.policy
+            display_data(bucket.policy_data)
           end
 
         end
