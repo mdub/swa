@@ -10,6 +10,10 @@ module Swa
         bucket.name
       end
 
+      def uri
+        "s3://#{bucket.name}"
+      end
+
       def policy_json
         bucket.policy.policy.read
       end
@@ -20,6 +24,10 @@ module Swa
 
       def objects(options = {})
         Swa::S3::Object.list(aws_resource.objects(options))
+      end
+
+      def delete
+        bucket.delete
       end
 
       private

@@ -55,6 +55,15 @@ module Swa
 
           end
 
+          subcommand "delete", "Delete object" do
+
+            def execute
+              logger.info "Deleting #{object.uri}"
+              object.delete
+            end
+
+          end
+
           protected
 
           def object
@@ -91,6 +100,17 @@ module Swa
 
           end
 
+          subcommand "delete-all", "Delete objects" do
+
+            def execute
+              objects.each do |o|
+                logger.info "Deleting #{o.uri}"
+                o.delete
+              end
+            end
+
+          end
+
           protected
 
           def objects
@@ -103,6 +123,15 @@ module Swa
 
           def execute
             display_data(bucket.policy_data)
+          end
+
+        end
+
+        subcommand "delete", "Delete bucket" do
+
+          def execute
+            logger.info "Deleting #{bucket.uri}"
+            bucket.delete
           end
 
         end

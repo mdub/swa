@@ -33,6 +33,10 @@ module Swa
         object.put(options.merge(:body => io))
       end
 
+      def delete
+        object.delete
+      end
+
       private
 
       alias_method :object, :aws_resource
