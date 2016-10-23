@@ -6,6 +6,14 @@ module Swa
     class Object < Resource
 
       def summary
+        [
+          object.last_modified.strftime("%Y-%m-%d %H:%M:%S"),
+          rpad(object.size, 10),
+          key
+        ].join("  ")
+      end
+
+      def key
         object.key
       end
 

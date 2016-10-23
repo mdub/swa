@@ -33,30 +33,36 @@ module Swa
 
         alias_method :item, :bucket
 
-        subcommand "object", "Show object" do
-
-          parameter "KEY", "object key", :attribute_name => :object_key
-
-          include ItemBehaviour
-
-          protected
-
-          def object
-            Swa::S3::Object.new(aws_bucket.object(object_key))
-          end
-
-          alias_method :item, :object
-
-        end
-
         subcommand "objects", "List objects" do
 
-          include CollectionBehaviour
+          option "--prefix", "PREFIX", "object prefix"
+
+          self.default_subcommand = "list"
+
+          subcommand ["list", "ls"], "One-line summary" do
+
+            def execute
+              objects.each do |i|
+                puts i.summary
+              end
+            end
+
+          end
+
+          subcommand ["data", "d"], "Full details" do
+
+            parameter "[QUERY]", "JMESPath expression"
+
+            def execute
+              display_data(objects.map(&:data).to_a, query)
+            end
+
+          end
 
           protected
 
-          def collection
-            Swa::S3::Object.list(aws_bucket.objects)
+          def objects
+            bucket.objects(:prefix => prefix)
           end
 
         end

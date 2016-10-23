@@ -18,6 +18,10 @@ module Swa
         MultiJson.load(policy_json)
       end
 
+      def objects(options = {})
+        Swa::S3::Object.list(aws_resource.objects(options))
+      end
+
       private
 
       alias_method :bucket, :aws_resource

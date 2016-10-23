@@ -33,10 +33,10 @@ module Swa
         when /^(\w+)-/
           subcommand = subcommand_for_prefix($1)
           arguments = [subcommand] + arguments if subcommand
-        when %r{^s3://([^/]+)/?$}
+        when %r{^s3://([^/]+)/(.*)}
+          arguments[0, 1] = ["s3", "bucket", $1, "objects", "--prefix", $2]
+        when %r{^s3://([^/]+)$}
           arguments[0, 1] = ["s3", "bucket", $1]
-        when %r{^s3://([^/]+)/(.+)$}
-          arguments[0, 1] = ["s3", "bucket", $1, "object", $2]
         end
         super(arguments)
       end
