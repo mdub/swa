@@ -33,6 +33,22 @@ module Swa
 
         alias_method :item, :bucket
 
+        subcommand "object", "Show object" do
+
+          parameter "KEY", "object key", :attribute_name => :object_key
+
+          include ItemBehaviour
+
+          protected
+
+          def object
+            Swa::S3::Object.new(aws_bucket.object(object_key))
+          end
+
+          alias_method :item, :object
+
+        end
+
         subcommand "objects", "List objects" do
 
           option "--prefix", "PREFIX", "object prefix"

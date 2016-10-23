@@ -9,12 +9,20 @@ module Swa
         [
           object.last_modified.strftime("%Y-%m-%d %H:%M:%S"),
           rpad(object.size, 10),
-          key
+          uri
         ].join("  ")
       end
 
       def key
         object.key
+      end
+
+      def uri
+        "s3://#{object.bucket.name}/#{object.key}"
+      end
+
+      def to_s
+        uri
       end
 
       private
