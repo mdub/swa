@@ -63,6 +63,16 @@ module Swa
 
           end
 
+          subcommand "upload", "Upload file" do
+
+            parameter "FILE", "file name", :attribute_name => :file_name
+
+            def execute
+              object.upload(file_name)
+            end
+
+          end
+
           subcommand "delete", "Delete object" do
 
             def execute

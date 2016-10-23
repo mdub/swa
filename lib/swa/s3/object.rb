@@ -33,6 +33,10 @@ module Swa
         object.put(options.merge(:body => io))
       end
 
+      def upload(file_name)
+        object.upload_file(file_name)
+      end
+
       def delete
         object.delete
       end
