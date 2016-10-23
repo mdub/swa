@@ -49,8 +49,16 @@ module Swa
 
           subcommand "put", "PUT object" do
 
+            parameter "[PAYLOAD]", "data", :default => "STDIN"
+
             def execute
-              object.put($stdin.read)
+              object.put(payload)
+            end
+
+            private
+
+            def default_payload
+              $stdin.read
             end
 
           end
