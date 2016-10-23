@@ -25,6 +25,14 @@ module Swa
         uri
       end
 
+      def get_body
+        object.get.body
+      end
+
+      def put(io, options = {})
+        object.put(options.merge(:body => io))
+      end
+
       private
 
       alias_method :object, :aws_resource

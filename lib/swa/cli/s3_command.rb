@@ -39,6 +39,22 @@ module Swa
 
           include ItemBehaviour
 
+          subcommand "get", "GET object" do
+
+            def execute
+              IO.copy_stream(object.get_body, $stdout)
+            end
+
+          end
+
+          subcommand "put", "PUT object" do
+
+            def execute
+              object.put($stdin.read)
+            end
+
+          end
+
           protected
 
           def object
