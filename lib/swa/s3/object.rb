@@ -7,7 +7,7 @@ module Swa
 
       def summary
         [
-          object.last_modified.strftime("%Y-%m-%d %H:%M:%S"),
+          object.last_modified.iso8601,
           rpad(object.size, 10),
           uri
         ].join("  ")
