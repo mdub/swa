@@ -32,9 +32,7 @@ module Swa
         case remaining_arguments.first
         when /^(\w+)-/
           subcommand = subcommand_for_prefix($1)
-          if subcommand
-            remaining_arguments[0,1] = [subcommand] + arguments
-          end
+          remaining_arguments.unshift(subcommand) if subcommand
         when %r{^s3://([^/]+)/(.+/)?$}
           remaining_arguments[0, 1] = ["s3", "bucket", $1, "objects", "--prefix", $2]
         when %r{^s3://([^/]+)/(.+)\*$}
