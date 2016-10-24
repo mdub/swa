@@ -1,3 +1,5 @@
+require "swa/polyfill"
+
 module Swa
 
   module DataPresentation
