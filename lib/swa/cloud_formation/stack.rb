@@ -7,17 +7,18 @@ module Swa
 
       def summary
         [
-          name,
-          # pad(subnet.subnet_id, 15),
-          # pad(subnet.vpc_id, 12),
-          # pad(subnet.availability_zone, 15),
-          # pad(subnet.cidr_block, 18),
-          # quoted(name)
+          pad(name, 44),
+          pad(stack.stack_status, 24),
+          last_modified_at.iso8601
         ].join("  ")
       end
 
       def name
         stack.name
+      end
+
+      def last_modified_at
+        stack.last_updated_time || stack.creation_time
       end
 
       private
