@@ -1,3 +1,4 @@
+require "stackup/stack"
 require "swa/resource"
 require "yaml"
 
@@ -21,24 +22,32 @@ module Swa
       end
 
       def template_body
-        stack.client.get_template(:stack_name => name).template_body
+        stackup_stack.template_body
       end
 
       def template_data
-        YAML.load(template_body)
+        stackup_stack.template
       end
 
       def parameters
-        stack.parameters.map(&:to_h)
+        stackup_stack.parameters
       end
 
       def outputs
-        stack.outputs.map(&:to_h)
+        stackup_stack.outputs
+      end
+
+      def resources
+        stackup_stack.resources
       end
 
       private
 
       alias_method :stack, :aws_resource
+
+      def stackup_stack
+        Stackup::Stack.new(name, stack.client)
+      end
 
     end
 

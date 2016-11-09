@@ -23,20 +23,14 @@ module Swa
 
         end
 
-        subcommand "parameters", "Show parameters" do
-
-          def execute
-            display_data(stack.parameters)
-          end
-
-        end
-
-        subcommand "outputs", "Show outputs" do
-
-          def execute
-            display_data(stack.outputs)
-          end
-
+        %w(parameters outputs resources).each do |thing|
+          class_eval <<-RUBY
+            subcommand "#{thing}", "Show #{thing}" do
+              def execute
+                display_data(stack.#{thing})
+              end
+            end
+          RUBY
         end
 
         private

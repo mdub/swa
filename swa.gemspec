@@ -28,5 +28,6 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "clamp", ">= 1.1.0"
   spec.add_runtime_dependency "console_logger"
   spec.add_runtime_dependency "multi_json"
+  spec.add_runtime_dependency "stackup", ">= 1.0.0"
 
 end
