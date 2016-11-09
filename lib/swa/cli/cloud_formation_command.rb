@@ -9,6 +9,46 @@ module Swa
 
     class CloudFormationCommand < BaseCommand
 
+      subcommand ["stack", "s"], "Show stack" do
+
+        parameter "NAME", "stack name"
+
+        include ItemBehaviour
+
+        subcommand "template", "Show template" do
+
+          def execute
+            display_data(stack.template_data)
+          end
+
+        end
+
+        subcommand "parameters", "Show parameters" do
+
+          def execute
+            display_data(stack.parameters)
+          end
+
+        end
+
+        subcommand "outputs", "Show outputs" do
+
+          def execute
+            display_data(stack.outputs)
+          end
+
+        end
+
+        private
+
+        def stack
+          Swa::CloudFormation::Stack.new(cloud_formation.stack(name))
+        end
+
+        alias_method :item, :stack
+
+      end
+
       subcommand ["stacks"], "Show stacks" do
 
         include CollectionBehaviour

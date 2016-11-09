@@ -1,4 +1,5 @@
 require "swa/resource"
+require "yaml"
 
 module Swa
   module CloudFormation
@@ -13,12 +14,26 @@ module Swa
         ].join("  ")
       end
 
-      def name
-        stack.name
-      end
+      delegate :name
 
       def last_modified_at
         stack.last_updated_time || stack.creation_time
+      end
+
+      def template_body
+        stack.client.get_template(:stack_name => name).template_body
+      end
+
+      def template_data
+        YAML.load(template_body)
+      end
+
+      def parameters
+        stack.parameters.map(&:to_h)
+      end
+
+      def outputs
+        stack.outputs.map(&:to_h)
       end
 
       private
