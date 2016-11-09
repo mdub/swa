@@ -24,7 +24,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
 
-  spec.add_runtime_dependency "aws-sdk-resources"
+  spec.add_runtime_dependency "aws-sdk-resources", ">= 2.6.14"
   spec.add_runtime_dependency "chronic"
   spec.add_runtime_dependency "clamp", ">= 1.1.0"
   spec.add_runtime_dependency "console_logger"
