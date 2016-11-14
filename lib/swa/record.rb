@@ -19,6 +19,12 @@ module Swa
       camelize_keys(aws_record.to_h)
     end
 
+    extend Forwardable
+
+    def self.delegate(*methods)
+      def_delegators :aws_record, *methods
+    end
+
     private
 
     attr_reader :aws_record
