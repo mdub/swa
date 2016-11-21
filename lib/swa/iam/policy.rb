@@ -6,6 +6,10 @@ module Swa
 
     class Policy < Resource
 
+      def id
+        policy.policy_id
+      end
+
       def summary
         [
           pad(policy.arn, 60),

@@ -8,6 +8,10 @@ module Swa
 
       include TaggedResource
 
+      def id
+        subnet.subnet_id
+      end
+
       def summary
         [
           field(subnet, :subnet_id),

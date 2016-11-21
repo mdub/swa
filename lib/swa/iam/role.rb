@@ -5,6 +5,10 @@ module Swa
 
     class Role < Resource
 
+      def id
+        role.role_id
+      end
+
       def summary
         role.name
       end

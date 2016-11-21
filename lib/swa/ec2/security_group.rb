@@ -6,6 +6,10 @@ module Swa
 
     class SecurityGroup < Resource
 
+      def id
+        sg.group_id
+      end
+
       def summary
         [
           field(sg, :group_id),

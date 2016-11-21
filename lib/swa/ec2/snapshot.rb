@@ -8,6 +8,10 @@ module Swa
 
       include TaggedResource
 
+      def id
+        s.snapshot_id
+      end
+
       def summary
         [
           field(s, :snapshot_id),

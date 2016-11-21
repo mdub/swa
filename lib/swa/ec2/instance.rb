@@ -9,6 +9,10 @@ module Swa
 
       include TaggedResource
 
+      def id
+        i.instance_id
+      end
+
       def summary
         [
           field(i, :instance_id),

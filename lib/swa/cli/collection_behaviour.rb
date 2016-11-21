@@ -19,6 +19,14 @@ module Swa
 
         end
 
+        target.subcommand ["ids"], "Just print ids" do
+          def execute
+            collection.each do |i|
+              puts i.id
+            end
+          end
+        end
+
         target.subcommand ["data", "d"], "Full details" do
 
           parameter "[QUERY]", "JMESPath expression"

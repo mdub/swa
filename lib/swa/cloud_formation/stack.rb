@@ -7,6 +7,10 @@ module Swa
 
     class Stack < Resource
 
+      def id
+        name
+      end
+
       def summary
         [
           pad(name, 44),

@@ -5,6 +5,10 @@ module Swa
 
     class KeyPair < Resource
 
+      def id
+        name
+      end
+
       def summary
         [
           pad(name, 44),

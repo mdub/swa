@@ -8,6 +8,10 @@ module Swa
 
       include TaggedResource
 
+      def id
+        v.volume_id
+      end
+
       def summary
         [
           field(v, :volume_id),

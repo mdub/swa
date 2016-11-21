@@ -5,8 +5,18 @@ module Swa
 
     class Group < Resource
 
+      def id
+        group.group_id
+      end
+
+      def name
+        group.group_name
+      end
+
+      delegate :arn
+
       def summary
-        group.arn
+        arn
       end
 
       private

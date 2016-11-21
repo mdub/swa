@@ -5,6 +5,10 @@ module Swa
 
     class Alias < Record
 
+      def id
+        name
+      end
+
       def summary
         [
           pad(name, 36),

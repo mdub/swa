@@ -8,6 +8,10 @@ module Swa
 
       include TaggedResource
 
+      def id
+        vpc.vpc_id
+      end
+
       def summary
         [
           field(vpc, :vpc_id),

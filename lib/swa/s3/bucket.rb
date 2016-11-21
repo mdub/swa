@@ -6,9 +6,15 @@ module Swa
 
     class Bucket < Resource
 
-      def summary
-        bucket.name
+      def id
+        name
       end
+
+      def summary
+        name
+      end
+
+      delegate :name
 
       def uri
         "s3://#{bucket.name}"

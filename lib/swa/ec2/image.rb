@@ -8,6 +8,10 @@ module Swa
 
       include TaggedResource
 
+      def id
+        ami.image_id
+      end
+
       def summary
         [
           field(ami, :image_id),
