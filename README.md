@@ -76,6 +76,16 @@ The "item" sub-command can be ommitted, when it can be inferred from the resourc
     $ swa ec2 i-bcf48c2b data
     $ swa ec2 ami-1e73737d data
 
+## Installing it
+
+SWA is packaged as a Ruby gem, and can be installed with:
+
+    gem install swa
+
+On a Mac, I recommend [brew-gem](https://github.com/sportngin/brew-gem) for easy system-wide installation:
+
+    gem install swa
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/mdub/swa.
