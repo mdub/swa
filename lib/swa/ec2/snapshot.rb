@@ -12,12 +12,17 @@ module Swa
         [
           field(s, :snapshot_id),
           field(s, :volume_id),
-          sprintf("%5d", s.volume_size),
-          s.start_time.iso8601,
-          rpad(s.progress, 4),
-          quoted(s.description)
+          sprintf("%5d", volume_size),
+          start_time.iso8601,
+          rpad(progress, 4),
+          quoted(description)
         ].join("  ")
       end
+
+      delegate :description
+      delegate :progress
+      delegate :start_time
+      delegate :volume_size
 
       delegate :delete
 

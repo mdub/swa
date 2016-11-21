@@ -302,11 +302,33 @@ module Swa
         EOF
 
         option "--owned-by", "OWNER", "with specified owner", :default => "self"
+        option ["--volume", "--of"], "VOLUME-ID", "for specified volume"
+
+        option ["--started-after", "--after"], "WHEN", "earliest start-time"
+        option ["--started-before", "--before"], "WHEN", "latest start-time"
 
         include TagFilterOptions
         include CollectionBehaviour
 
         private
+
+        def volume=(volume_id)
+          add_filter("volume-id", volume_id)
+        end
+
+        def started_after=(datetime_string)
+          min_start_time = parse_datetime(datetime_string).max
+          selector.add do |image|
+            image.start_time > min_start_time
+          end
+        end
+
+        def started_before=(datetime_string)
+          max_start_time = parse_datetime(datetime_string).min
+          selector.add do |image|
+            image.start_time < max_start_time
+          end
+        end
 
         def snapshots
           query_options[:owner_ids] = [owned_by]
