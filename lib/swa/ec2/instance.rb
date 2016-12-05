@@ -21,7 +21,8 @@ module Swa
           pad(i.state.name, 10),
           field(i, :private_ip_address),
           field(i, :public_ip_address),
-          quoted(name)
+          quoted(name),
+          decorated_key_name
         ].join("  ")
       end
 
@@ -40,6 +41,10 @@ module Swa
       private
 
       alias_method :i, :aws_resource
+
+      def decorated_key_name
+        "🔑 #{i.key_name}" if i.key_name
+      end
 
     end
 
