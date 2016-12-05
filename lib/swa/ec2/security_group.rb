@@ -22,6 +22,8 @@ module Swa
         aws_resource.name
       end
 
+      delegate :delete
+
       private
 
       alias_method :sg, :aws_resource

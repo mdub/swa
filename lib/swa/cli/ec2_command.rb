@@ -245,6 +245,12 @@ module Swa
 
         include ItemBehaviour
 
+        subcommand ["delete"], "Delete group" do
+          def execute
+            security_group.delete
+          end
+        end
+
         private
 
         def security_group
@@ -259,6 +265,12 @@ module Swa
 
         include TagFilterOptions
         include CollectionBehaviour
+
+        subcommand ["delete"], "Delete group" do
+          def execute
+            security_groups.each(&:delete)
+          end
+        end
 
         private
 
