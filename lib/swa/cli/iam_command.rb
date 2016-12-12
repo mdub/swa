@@ -101,12 +101,29 @@ module Swa
           List policies.
         EOF
 
+        option "--scope", "SCOPE", "'AWS' or 'Local'" do |arg|
+          case arg.downcase
+          when "all", "*"
+            "All"
+          when "local"
+            "Local"
+          when "aws"
+            "AWS"
+          else
+            raise ArgumentError, "must be one of 'All', 'AWS' or 'Local'"
+          end
+        end
+
         include CollectionBehaviour
 
         private
 
         def collection
-          query_for(:policies, Swa::IAM::Policy)
+          query_for(:policies, Swa::IAM::Policy, query_options)
+        end
+
+        def query_options
+          { :scope => scope }.reject { |_k,v| v.nil? }
         end
 
       end
@@ -177,8 +194,8 @@ module Swa
         ::Aws::IAM::Resource.new(aws_config)
       end
 
-      def query_for(query_method, resource_model)
-        aws_resources = iam.public_send(query_method)
+      def query_for(query_method, resource_model, *query_args)
+        aws_resources = iam.public_send(query_method, *query_args)
         wrapped_resources = resource_model.list(aws_resources)
       end
 
