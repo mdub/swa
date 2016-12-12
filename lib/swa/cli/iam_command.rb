@@ -3,6 +3,7 @@ require "swa/cli/base_command"
 require "swa/cli/collection_behaviour"
 require "swa/cli/item_behaviour"
 require "swa/iam/group"
+require "swa/iam/instance_profile"
 require "swa/iam/policy"
 require "swa/iam/role"
 require "swa/iam/user"
@@ -38,6 +39,36 @@ module Swa
 
         def collection
           query_for(:groups, Swa::IAM::Group)
+        end
+
+      end
+
+      subcommand ["instance-profile", "ip"], "Show instance-profile" do
+
+        parameter "NAME", "name/ARN"
+
+        include ItemBehaviour
+
+        private
+
+        def item
+          Swa::IAM::InstanceProfile.new(iam.instance_profile(File.basename(name)))
+        end
+
+      end
+
+      subcommand ["instance-profiles", "ips"], "Show instance-profiles" do
+
+        self.description = <<-EOF
+          List instance-profiles.
+        EOF
+
+        include CollectionBehaviour
+
+        private
+
+        def collection
+          query_for(:instance_profiles, Swa::IAM::InstanceProfile)
         end
 
       end
