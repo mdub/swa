@@ -1,5 +1,7 @@
 require "multi_json"
 require "swa/resource"
+require "swa/s3/object"
+require "swa/s3/object_version"
 
 module Swa
   module S3
@@ -30,6 +32,10 @@ module Swa
 
       def objects(options = {})
         Swa::S3::Object.list(aws_resource.objects(options))
+      end
+
+      def object_versions(options = {})
+        Swa::S3::ObjectVersion.list(aws_resource.object_versions(options))
       end
 
       def delete

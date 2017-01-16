@@ -82,6 +82,30 @@ module Swa
 
           end
 
+          subcommand ["version", "v"], "Show version" do
+
+            parameter "ID", "object version ID", :attribute_name => :version_id
+
+            include ItemBehaviour
+
+            subcommand "get", "GET object" do
+
+              def execute
+                IO.copy_stream(version.get_body, $stdout)
+              end
+
+            end
+
+            protected
+
+            def version
+              object.version(version_id)
+            end
+
+            alias_method :item, :version
+
+          end
+
           protected
 
           def object
@@ -133,6 +157,51 @@ module Swa
 
           def objects
             bucket.objects(:prefix => prefix)
+          end
+
+        end
+
+        subcommand ["object-versions", "versions", "vs"], "List object-versions" do
+
+          option "--prefix", "PREFIX", "object prefix"
+
+          self.default_subcommand = "list"
+
+          subcommand ["list", "ls"], "One-line summary" do
+
+            def execute
+              versions.each do |i|
+                puts i.summary
+              end
+            end
+
+          end
+
+          subcommand ["data", "d"], "Full details" do
+
+            parameter "[QUERY]", "JMESPath expression"
+
+            def execute
+              display_data(versions.map(&:data).to_a, query)
+            end
+
+          end
+
+          subcommand "delete-all", "Delete versions" do
+
+            def execute
+              versions.each do |v|
+                logger.info "Deleting #{v.uri} #{v.id}"
+                v.delete
+              end
+            end
+
+          end
+
+          protected
+
+          def versions
+            bucket.object_versions(:prefix => prefix)
           end
 
         end

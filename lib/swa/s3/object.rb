@@ -1,4 +1,5 @@
 require "swa/resource"
+require "swa/s3/object_version"
 
 module Swa
   module S3
@@ -39,6 +40,10 @@ module Swa
 
       def delete
         object.delete
+      end
+
+      def version(version_id)
+        Swa::S3::ObjectVersion.new(object.version(version_id))
       end
 
       private
