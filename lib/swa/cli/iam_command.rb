@@ -2,6 +2,7 @@ require "aws-sdk-resources"
 require "swa/cli/base_command"
 require "swa/cli/collection_behaviour"
 require "swa/cli/item_behaviour"
+require "swa/iam/credentials"
 require "swa/iam/group"
 require "swa/iam/instance_profile"
 require "swa/iam/policy"
@@ -140,6 +141,41 @@ module Swa
           Swa::IAM::Role.new(iam.role(File.basename(name)))
         end
 
+        subcommand "assume", "Assume the role" do
+
+          option "--session-name", "NAME", "STS session-name",
+                 :environment_variable => "USER",
+                 :default => "swa"
+
+          parameter "[COMMAND] ...", "command to execute"
+
+          def execute
+            env = assume.to_env
+            if command_list.empty?
+              dump_env(env)
+            else
+              exec(env, *command_list)
+            end
+          end
+
+          private
+
+          def assume
+            response = sts_client.assume_role(
+              :role_arn => item.arn,
+              :role_session_name => session_name
+            )
+            Swa::IAM::Credentials.new(response.credentials.to_h)
+          end
+
+          def dump_env(env)
+            env.each do |k,v|
+              puts "#{k}=#{v}"
+            end
+          end
+
+        end
+
       end
 
       subcommand ["roles"], "Show roles" do
@@ -197,6 +233,10 @@ module Swa
       def query_for(query_method, resource_model, *query_args)
         aws_resources = iam.public_send(query_method, *query_args)
         wrapped_resources = resource_model.list(aws_resources)
+      end
+
+      def sts_client
+        ::Aws::STS::Client.new(aws_config)
       end
 
     end

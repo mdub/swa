@@ -1,4 +1,5 @@
 require "swa/resource"
+require "swa/iam/credentials"
 
 module Swa
   module IAM
@@ -7,6 +8,10 @@ module Swa
 
       def id
         role.role_id
+      end
+
+      def arn
+        role.arn
       end
 
       def summary
