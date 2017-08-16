@@ -229,7 +229,15 @@ module Swa
 
         include CollectionBehaviour
 
+        option "--named", "PATTERN", "name pattern"
+
         private
+
+        def named=(pattern)
+          selector.add do |kp|
+            File.fnmatch(pattern, kp.name)
+          end
+        end
 
         def key_pairs
           query_for(:key_pairs, Swa::EC2::KeyPair)
