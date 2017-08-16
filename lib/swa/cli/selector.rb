@@ -21,6 +21,10 @@ module Swa
         collection.lazy.select(&method(:call))
       end
 
+      def specified?
+        @predicates.any?
+      end
+
     end
 
   end

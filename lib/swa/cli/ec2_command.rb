@@ -227,9 +227,16 @@ module Swa
           List key-pairs.
         EOF
 
+        option "--named", "PATTERN", "name pattern"
+
         include CollectionBehaviour
 
-        option "--named", "PATTERN", "name pattern"
+        subcommand "delete", "Delete all key-pairs" do
+          def execute
+            signal_error "no key-pairs specified" unless selector.specified?
+            key_pairs.each(&:delete)
+          end
+        end
 
         private
 
