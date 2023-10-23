@@ -4,6 +4,7 @@ require "swa/cli/collection_behaviour"
 require "swa/cli/item_behaviour"
 require "swa/glue/crawler"
 require "swa/glue/database"
+require "swa/glue/job"
 require "swa/glue/table"
 
 module Swa
@@ -71,6 +72,32 @@ module Swa
 
         def collection
           query_for(:get_databases, :database_list, Swa::Glue::Database)
+        end
+
+      end
+
+      subcommand ["job"], "Show job" do
+
+        parameter "NAME", "job name"
+
+        include ItemBehaviour
+
+        private
+
+        def item
+          Swa::Glue::Job.new(glue_client.get_job(:job_name => name).job)
+        end
+
+      end
+
+      subcommand ["jobs"], "Show jobs" do
+
+        include CollectionBehaviour
+
+        private
+
+        def collection
+          query_for(:get_jobs, :jobs, Swa::Glue::Job)
         end
 
       end
