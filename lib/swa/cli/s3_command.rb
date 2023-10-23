@@ -1,4 +1,4 @@
-require "aws-sdk-resources"
+require "aws-sdk-s3"
 require "swa/cli/base_command"
 require "swa/cli/collection_behaviour"
 require "swa/cli/item_behaviour"
