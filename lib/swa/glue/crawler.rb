@@ -11,7 +11,7 @@ module Swa
           pad(state, 10),
           pad(last_crawl_status, 12),
           role
-        ].join(" ")
+        ].join("  ")
       end
 
       delegate :name

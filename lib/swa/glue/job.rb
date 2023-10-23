@@ -9,12 +9,12 @@ module Swa
         [
           pad(name, 48),
           role
-        ].join(" ")
+        ].join("  ")
       end
 
       delegate :name
       delegate :role
-      
+
     end
 
   end

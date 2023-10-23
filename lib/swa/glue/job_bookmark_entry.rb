@@ -10,7 +10,7 @@ module Swa
       end
 
       delegate :job_bookmark
-      
+
     end
 
   end

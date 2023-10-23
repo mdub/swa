@@ -10,7 +10,7 @@ module Swa
       end
 
       delegate :name
-      
+
     end
 
   end

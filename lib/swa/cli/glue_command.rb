@@ -7,6 +7,7 @@ require "swa/glue/database"
 require "swa/glue/job"
 require "swa/glue/job_run"
 require "swa/glue/job_bookmark_entry"
+require "swa/glue/partition"
 require "swa/glue/table"
 
 module Swa
@@ -52,18 +53,46 @@ module Swa
           Swa::Glue::Database.new(glue_client.get_database(:name => name).database)
         end
 
+        subcommand ["table"], "Show table" do
+
+          parameter "NAME", "table name", attribute_name: :table_name
+
+          include ItemBehaviour
+
+          subcommand ["partitions"], "Show partitions" do
+
+            include CollectionBehaviour
+
+            private
+
+            def collection
+              query_for(:get_partitions, :partitions, Swa::Glue::Partition, :database_name => name, :table_name => table_name)
+            end
+
+          end
+
+          private
+
+          def item
+            Swa::Glue::Table.new(glue_client.get_table(
+              :database_name => name, :name => table_name
+            ).table)
+          end
+
+        end
+
         subcommand ["tables"], "Show tables" do
 
           include CollectionBehaviour
-  
+
           private
-  
+
           def collection
             query_for(:get_tables, :table_list, Swa::Glue::Table, :database_name => name)
           end
-  
+
         end
-  
+
       end
 
       subcommand ["databases"], "Show databases" do
@@ -103,35 +132,35 @@ module Swa
             include ItemBehaviour
 
             private
-  
+
             def item
               Swa::Glue::JobBookmarkEntry.new(
                 glue_client.get_job_bookmark(:job_name => name, :run_id => run_id).job_bookmark_entry
               )
             end
-      
+
           end
-    
+
           private
 
           def item
             Swa::Glue::JobRun.new(glue_client.get_job_run(:job_name => name, :run_id => run_id).job_run)
           end
-    
+
         end
-  
+
         subcommand ["runs"], "Show runs" do
 
           include CollectionBehaviour
-  
+
           private
-  
+
           def collection
             query_for(:get_job_runs, :job_runs, Swa::Glue::JobRun, :job_name => name)
           end
-  
+
         end
-  
+
       end
 
       subcommand ["jobs"], "Show jobs" do

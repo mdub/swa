@@ -10,7 +10,7 @@ module Swa
           pad(id, 68),
           pad(job_run_state, 8),
           pad(started_on, 28)
-        ].join(" ")
+        ].join("  ")
       end
 
       delegate :id
