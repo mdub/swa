@@ -19,7 +19,7 @@ module Swa
       delegate :role
 
       def last_crawl_status
-        aws_record.last_crawl.status
+        aws_record.last_crawl&.status || "NEW"
       end
       
     end
