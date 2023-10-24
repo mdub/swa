@@ -2,6 +2,7 @@ require "aws-sdk-glue"
 require "swa/cli/base_command"
 require "swa/cli/collection_behaviour"
 require "swa/cli/item_behaviour"
+require "swa/glue/crawl"
 require "swa/glue/crawler"
 require "swa/glue/database"
 require "swa/glue/job"
@@ -20,6 +21,18 @@ module Swa
         parameter "NAME", "crawler name"
 
         include ItemBehaviour
+
+        subcommand ["crawls"], "Show crawls" do
+
+          include CollectionBehaviour
+
+          private
+
+          def collection
+            query_for(:list_crawls, :crawls, Swa::Glue::Crawl, :crawler_name => name)
+          end
+
+        end
 
         private
 
