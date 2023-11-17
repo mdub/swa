@@ -137,8 +137,12 @@ module Swa
 
         private
 
-        def item
+        def role
           Swa::IAM::Role.new(iam.role(File.basename(name)))
+        end
+
+        def item
+          role
         end
 
         subcommand "assume", "Assume the role" do
@@ -172,6 +176,40 @@ module Swa
             env.each do |k,v|
               puts "#{k}=#{v}"
             end
+          end
+
+        end
+
+        subcommand ["policies"], "Show role policies." do
+
+          include CollectionBehaviour
+
+          private
+
+          def collection
+            role.policies
+          end
+
+        end
+
+        subcommand ["policy"], "Show named role policy" do
+
+          parameter "NAME", "policy name", attribute_name: :policy_name
+
+          include ItemBehaviour
+
+          subcommand "document", "print policy document" do
+
+            def execute
+              puts item.document
+            end
+
+          end
+
+          private
+
+          def item
+            role.policy(policy_name)
           end
 
         end

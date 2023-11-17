@@ -1,5 +1,6 @@
 require "swa/resource"
 require "swa/iam/credentials"
+require "swa/iam/role_policy"
 
 module Swa
   module IAM
@@ -16,6 +17,14 @@ module Swa
 
       def summary
         role.name
+      end
+
+      def policies
+        RolePolicy.list(role.policies)
+      end
+
+      def policy(name)
+        RolePolicy.new(role.policy(name))
       end
 
       private
