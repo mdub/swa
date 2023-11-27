@@ -1,4 +1,5 @@
 require "swa/cli/base_command"
+require "swa/cli/athena_command"
 require "swa/cli/cloud_formation_command"
 require "swa/cli/ec2_command"
 require "swa/cli/elb_command"
@@ -12,6 +13,7 @@ module Swa
 
     class MainCommand < BaseCommand
 
+      subcommand "athena", "Athena stuff", AthenaCommand
       subcommand ["cf", "cloudformation"], "CloudFormation stuff", CloudFormationCommand
       subcommand "ec2", "EC2 stuff", Ec2Command
       subcommand "elb", "elb stuff", ElbCommand
