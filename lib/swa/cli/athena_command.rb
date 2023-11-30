@@ -4,6 +4,7 @@ require "swa/cli/collection_behaviour"
 require "swa/cli/item_behaviour"
 require "swa/athena/catalog"
 require "swa/athena/database"
+require "swa/athena/work_group"
 
 module Swa
   module CLI
@@ -25,7 +26,23 @@ module Swa
 
       end
 
-      subcommand "databases", "Show databases" do
+      subcommand "database", "Database" do
+
+        parameter "NAME", "database name", attribute_name: :database
+
+        include ItemBehaviour
+
+        private
+
+        def item
+          Swa::Athena::Database.new(
+            athena_client.get_database(catalog_name: catalog, database_name: database).database
+          )
+        end
+
+      end
+
+      subcommand ["databases", "dbs"], "Show databases" do
 
         include CollectionBehaviour
 
@@ -33,6 +50,18 @@ module Swa
 
         def collection
           query_for(:list_databases, :database_list, Swa::Athena::Database, catalog_name: catalog)
+        end
+
+      end
+
+      subcommand ["workgroups", "wgs"], "Show work-groups" do
+
+        include CollectionBehaviour
+
+        private
+
+        def collection
+          query_for(:list_work_groups, :work_groups, Swa::Athena::WorkGroup)
         end
 
       end
