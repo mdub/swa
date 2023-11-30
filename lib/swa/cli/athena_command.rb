@@ -1,4 +1,5 @@
 require "aws-sdk-athena"
+require "csv"
 require "swa/cli/base_command"
 require "swa/cli/collection_behaviour"
 require "swa/cli/item_behaviour"
@@ -54,6 +55,33 @@ module Swa
 
       end
 
+      subcommand ["query", "q"], "Run a query" do
+
+        parameter "QUERY", "SQL query"
+
+        def execute
+          start_query_response = athena_client.start_query_execution(query_string: query, work_group: workgroup)
+          wait_for_query(start_query_response.query_execution_id)
+          query_results = athena_client.get_query_results(query_execution_id: start_query_response.query_execution_id)
+          output_results_as_csv(query_results.result_set)
+        end
+
+        private
+
+        def wait_for_query(query_execution_id)
+          QueryCompletionWaiter.new(client: athena_client).wait(query_execution_id: query_execution_id)
+        end
+
+        def output_results_as_csv(result_set)
+          CSV($stdout.dup) do |csv|
+            result_set.rows.each do |row|
+              csv << row.data.map(&:var_char_value)
+            end
+          end
+        end
+
+      end
+
       subcommand ["workgroups", "wgs"], "Show work-groups" do
 
         include CollectionBehaviour
@@ -75,6 +103,45 @@ module Swa
       def query_for(query_method, response_key, model, **query_args)
         records = athena_client.public_send(query_method, **query_args).public_send(response_key)
         model.list(records)
+      end
+
+      class QueryCompletionWaiter
+
+        def initialize(options)
+          @client = options.fetch(:client)
+          @waiter = Aws::Waiters::Waiter.new({
+            max_attempts: 30,
+            delay: 5,
+            poller: Aws::Waiters::Poller.new(
+              operation_name: :get_query_execution,
+              acceptors: [
+                {
+                  "matcher" => "path",
+                  "argument" => "query_execution.status.state",
+                  "expected" => "SUCCEEDED",
+                  "state" => "success",
+                },
+                {
+                  "matcher" => "path",
+                  "argument" => "query_execution.status.state",
+                  "expected" => "FAILED",
+                  "state" => "failure",
+                },
+                {
+                  "matcher" => "path",
+                  "argument" => "query_execution.status.state",
+                  "expected" => "CANCELLED",
+                  "state" => "error",
+                }
+              ]
+            )
+          }.merge(options))
+        end
+
+        def wait(params = {})
+          @waiter.wait(client: @client, params: params)
+        end
+
       end
 
     end
