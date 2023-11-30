@@ -70,6 +70,15 @@ module Swa
           )
         end
 
+        subcommand "results", "Show results" do
+
+          def execute
+            query_results = athena_client.get_query_results(query_execution_id: execution_id)
+            output_results_as_csv(query_results.result_set)
+          end
+
+        end
+
       end
 
       subcommand ["executions", "query-executions"], "List query executions" do
@@ -111,14 +120,6 @@ module Swa
           QueryCompletionWaiter.new(client: athena_client).wait(query_execution_id: query_execution_id)
         end
 
-        def output_results_as_csv(result_set)
-          CSV($stdout.dup) do |csv|
-            result_set.rows.each do |row|
-              csv << row.data.map(&:var_char_value)
-            end
-          end
-        end
-
       end
 
       subcommand ["workgroups", "wgs"], "Show work-groups" do
@@ -142,6 +143,14 @@ module Swa
       def query_for(query_method, response_key, model, **query_args)
         records = athena_client.public_send(query_method, **query_args).public_send(response_key)
         model.list(records)
+      end
+
+      def output_results_as_csv(result_set)
+        CSV($stdout.dup) do |csv|
+          result_set.rows.each do |row|
+            csv << row.data.map(&:var_char_value)
+          end
+        end
       end
 
       class QueryCompletionWaiter
