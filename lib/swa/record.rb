@@ -16,7 +16,7 @@ module Swa
     include DataPresentation
 
     def data
-      camelize_keys(aws_record.to_h)
+      stringify_keys(aws_record.to_h)
     end
 
     extend Forwardable

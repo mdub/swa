@@ -19,7 +19,7 @@ module Swa
     include DataPresentation
 
     def data
-      camelize_keys(_resource_.data.to_h)
+      stringify_keys(_resource_.data.to_h)
     end
 
     extend Forwardable
