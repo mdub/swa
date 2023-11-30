@@ -5,6 +5,7 @@ require "swa/cli/collection_behaviour"
 require "swa/cli/item_behaviour"
 require "swa/athena/catalog"
 require "swa/athena/database"
+require "swa/athena/query_execution"
 require "swa/athena/work_group"
 
 module Swa
@@ -55,7 +56,45 @@ module Swa
 
       end
 
-      subcommand ["query", "q"], "Run a query" do
+      subcommand ["execution", "query-execution"], "Inspect query execution" do
+
+        parameter "ID", "execution ID", attribute_name: :execution_id
+
+        include ItemBehaviour
+
+        private
+
+        def item
+          Swa::Athena::QueryExecution.new(
+            athena_client.get_query_execution(query_execution_id: execution_id).query_execution
+          )
+        end
+
+      end
+
+      subcommand ["executions", "query-executions"], "List query executions" do
+
+        def execute
+          athena_client.list_query_executions(work_group: workgroup).query_execution_ids.each do |id|
+            puts id
+          end
+        end
+
+      end
+
+      subcommand ["executions", "query-executions"], "List query executions" do
+
+        include CollectionBehaviour
+
+        private
+
+        def collection
+          query_for(:list_query_executions, :query_execution_ids, Swa::Athena::QueryExecution, work_group: workgroup)
+        end
+
+      end
+
+      subcommand ["query", "q", "run"], "Run a query" do
 
         parameter "QUERY", "SQL query"
 
