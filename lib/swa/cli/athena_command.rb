@@ -118,6 +118,8 @@ module Swa
 
         def wait_for_query(query_execution_id)
           QueryCompletionWaiter.new(client: athena_client).wait(query_execution_id: query_execution_id)
+        rescue Aws::Waiters::Errors::FailureStateError => error
+          signal_error error.response.query_execution.status.state_change_reason
         end
 
       end
