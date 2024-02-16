@@ -120,7 +120,7 @@ module Swa
 
           option "--prefix", "PREFIX", "object prefix"
 
-          self.default_subcommand = "prefixes"
+          self.default_subcommand = "list"
 
           subcommand ["list", "ls"], "One-line summary" do
 

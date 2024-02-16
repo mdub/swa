@@ -31,11 +31,11 @@ module Swa
       delegate :prefix
 
       def column1
-        ""
+        "-"
       end
 
       def column2
-        ""
+        "-"
       end
 
       def uri
