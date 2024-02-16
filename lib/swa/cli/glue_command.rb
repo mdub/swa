@@ -66,6 +66,14 @@ module Swa
           Swa::Glue::Database.new(glue_client.get_database(:name => name).database)
         end
 
+        subcommand ["delete"], "Delete database" do
+
+          def execute
+            glue_client.delete_database(:name => name)
+          end
+
+        end
+
         subcommand ["table"], "Show table" do
 
           parameter "NAME", "table name", attribute_name: :table_name
@@ -80,6 +88,14 @@ module Swa
 
             def collection
               query_for(:get_partitions, :partitions, Swa::Glue::Partition, :database_name => name, :table_name => table_name)
+            end
+
+          end
+
+          subcommand ["delete"], "Delete table" do
+
+            def execute
+              glue_client.delete_table(:database_name => name, :name => table_name)
             end
 
           end
