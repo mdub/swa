@@ -120,13 +120,16 @@ module Swa
 
           option "--prefix", "PREFIX", "object prefix"
 
-          self.default_subcommand = "list"
+          self.default_subcommand = "prefixes"
 
           subcommand ["list", "ls"], "One-line summary" do
 
+            option %w(-R --recursive), :flag, "list recursively"
+
             def execute
-              objects.each do |i|
-                puts i.summary
+              delimiter = "/" unless recursive?
+              bucket.object_list_entries(prefix: prefix, delimiter: delimiter).each do |e|
+                puts e.summary
               end
             end
 
@@ -156,7 +159,7 @@ module Swa
           protected
 
           def objects
-            bucket.objects(:prefix => prefix)
+            bucket.objects(prefix: prefix)
           end
 
         end
