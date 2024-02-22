@@ -96,7 +96,7 @@ module Swa
         option ["--database", "-D"], "NAME", "Database name"
         option ["--output-location", "-O"], "S3_URL", "S3 output location for query results"
 
-        parameter "QUERY", "SQL query"
+        parameter "[QUERY]", "SQL query", :default => "STDIN"
 
         def execute
           start_query_response = athena_client.start_query_execution(
@@ -116,6 +116,10 @@ module Swa
         end
 
         private
+
+        def default_query
+          $stdin.read
+        end
 
         def wait_for_query(query_execution_id)
           QueryCompletionWaiter.new(client: athena_client).wait(query_execution_id: query_execution_id)
