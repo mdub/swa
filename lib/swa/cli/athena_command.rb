@@ -91,18 +91,6 @@ module Swa
 
       end
 
-      subcommand ["executions", "query-executions"], "List query executions" do
-
-        include CollectionBehaviour
-
-        private
-
-        def collection
-          query_for(:list_query_executions, :query_execution_ids, Swa::Athena::QueryExecution, work_group: workgroup)
-        end
-
-      end
-
       subcommand ["query", "q", "run"], "Run a query" do
 
         parameter "QUERY", "SQL query"
