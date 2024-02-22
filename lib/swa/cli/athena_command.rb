@@ -91,12 +91,25 @@ module Swa
 
       end
 
-      subcommand ["query", "q", "run"], "Run a query" do
+      subcommand ["query", "q", "execute", "exec"], "Run a query" do
+
+        option ["--database", "-D"], "NAME", "Database name"
+        option ["--output-location", "-O"], "S3_URL", "S3 output location for query results"
 
         parameter "QUERY", "SQL query"
 
         def execute
-          start_query_response = athena_client.start_query_execution(query_string: query, work_group: workgroup)
+          start_query_response = athena_client.start_query_execution(
+            query_execution_context: {
+              catalog: catalog,
+              database: database
+            },
+            query_string: query,
+            result_configuration: {
+              output_location: output_location
+            },
+            work_group: workgroup
+          )
           wait_for_query(start_query_response.query_execution_id)
           query_results = athena_client.get_query_results(query_execution_id: start_query_response.query_execution_id)
           output_results_as_csv(query_results.result_set)
