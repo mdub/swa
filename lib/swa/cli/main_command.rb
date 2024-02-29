@@ -6,6 +6,7 @@ require "swa/cli/elb_command"
 require "swa/cli/glue_command"
 require "swa/cli/iam_command"
 require "swa/cli/kms_command"
+require "swa/cli/lake_formation_command"
 require "swa/cli/s3_command"
 
 module Swa
@@ -20,6 +21,7 @@ module Swa
       subcommand "glue", "Glue stuff", GlueCommand
       subcommand "iam", "IAM stuff", IamCommand
       subcommand "kms", "KMS stuff", KmsCommand
+      subcommand ["lf", "lakeformation"], "LakeFormation stuff", LakeFormationCommand
       subcommand "s3", "S3 stuff", S3Command
 
       protected
