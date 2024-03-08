@@ -16,25 +16,24 @@ module Swa
           List permissions.
         EOF
 
+        ALLOWED_RESOURCE_TYPES = %w(CATALOG DATABASE TABLE DATA_LOCATION LF_TAG LF_TAG_POLICY LF_TAG_POLICY_DATABASE LF_TAG_POLICY_TABLE)
+
+        option ["--type", "-T"], "TYPE", "Resource type" do |value|
+          value = value.upcase
+          raise ArgumentError, "Invalid resource type: #{value}" unless ALLOWED_RESOURCE_TYPES.include?(value)
+          value
+        end
+
         include CollectionBehaviour
 
         private
 
         def collection
-          query_for(:list_permissions, :principal_resource_permissions, Swa::LakeFormation::Permission)
+          query_args = {}
+          query_args[:resource_type] = type if type
+          query_for(:list_permissions, :principal_resource_permissions, Swa::LakeFormation::Permission, **query_args)
         end
 
-      end
-
-      protected
-
-      def lf_client
-        ::Aws::LakeFormation::Client.new(aws_config)
-      end
-
-      def query_for(query_method, response_key, model)
-        records = lf_client.public_send(query_method).public_send(response_key)
-        model.list(records)
       end
 
       subcommand ["resources"], "Show resources" do
@@ -59,8 +58,8 @@ module Swa
         ::Aws::LakeFormation::Client.new(aws_config)
       end
 
-      def query_for(query_method, response_key, model)
-        records = lf_client.public_send(query_method).public_send(response_key)
+      def query_for(query_method, response_key, model, **query_args)
+        records = lf_client.public_send(query_method, **query_args).public_send(response_key)
         model.list(records)
       end
 
