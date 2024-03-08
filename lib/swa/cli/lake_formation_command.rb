@@ -2,6 +2,7 @@ require "aws-sdk-lakeformation"
 require "swa/cli/base_command"
 require "swa/cli/collection_behaviour"
 require "swa/cli/item_behaviour"
+require "swa/lake_formation/permission"
 require "swa/lake_formation/resource_info"
 
 module Swa
