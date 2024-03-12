@@ -106,6 +106,18 @@ module Swa
 
           end
 
+          subcommand ["versions"], "Show versions" do
+
+            include CollectionBehaviour
+
+            protected
+
+            def collection
+              bucket.object_versions(:prefix => object_key)
+            end
+
+          end
+
           protected
 
           def object
