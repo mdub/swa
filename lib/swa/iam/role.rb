@@ -1,6 +1,7 @@
 require "swa/resource"
 require "swa/iam/credentials"
 require "swa/iam/role_policy"
+require "uri"
 
 module Swa
   module IAM
@@ -25,6 +26,10 @@ module Swa
 
       def policy(name)
         RolePolicy.new(role.policy(name))
+      end
+
+      def assume_role_policy_document
+        URI.decode_uri_component(role.assume_role_policy_document)
       end
 
       private

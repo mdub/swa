@@ -214,6 +214,36 @@ module Swa
 
         end
 
+        subcommand "trust-policy", "print AssumeRolePolicyDocument" do
+
+          self.default_subcommand = "data"
+
+          subcommand ["data", "d"], "Display as data" do
+
+            parameter "[QUERY]", "JMESPath expression"
+
+            def execute
+              display_data(trust_policy_data, query)
+            end
+
+            private
+
+            def trust_policy_data
+              JSON.parse(role.assume_role_policy_document)
+            end
+
+          end
+
+          subcommand ["document", "doc"], "Print source document" do
+
+            def execute
+              puts role.assume_role_policy_document
+            end
+
+          end
+
+        end
+
       end
 
       subcommand ["roles"], "Show roles" do
