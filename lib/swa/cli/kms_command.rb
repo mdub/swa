@@ -54,9 +54,8 @@ module Swa
         ::Aws::KMS::Client.new(aws_config)
       end
 
-      def query_for(query_method, response_key, model)
-        records = kms_client.public_send(query_method).public_send(response_key)
-        model.list(records)
+      def query_for(query_method, response_key, model, **query_args)
+        model.list_from_query(kms_client, query_method, response_key, **query_args)
       end
 
     end

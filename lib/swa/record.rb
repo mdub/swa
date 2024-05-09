@@ -9,6 +9,13 @@ module Swa
       records.lazy.map(&method(:new))
     end
 
+    def self.list_from_query(client, query_method, response_key, **query_args)
+      records = client.public_send(query_method, **query_args).each.lazy.flat_map { |page|
+        page.public_send(response_key)
+      }
+      list(records)
+    end
+
     def initialize(aws_record)
       @aws_record = aws_record
     end

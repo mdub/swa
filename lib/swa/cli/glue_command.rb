@@ -211,8 +211,7 @@ module Swa
       end
 
       def query_for(query_method, response_key, model, **query_args)
-        records = glue_client.public_send(query_method, **query_args).public_send(response_key)
-        model.list(records)
+        model.list_from_query(glue_client, query_method, response_key, **query_args)
       end
 
     end
