@@ -112,7 +112,11 @@ module Swa
           )
           wait_for_query(start_query_response.query_execution_id)
           query_results = athena_client.get_query_results(query_execution_id: start_query_response.query_execution_id)
-          output_results_as_csv(query_results.result_set)
+          if query =~ /\AEXPLAIN/
+            output_explain_result(query_results.result_set)
+          else
+            output_results_as_csv(query_results.result_set)
+          end
         end
 
         private
@@ -125,6 +129,12 @@ module Swa
           QueryCompletionWaiter.new(client: athena_client).wait(query_execution_id: query_execution_id)
         rescue Aws::Waiters::Errors::FailureStateError => error
           signal_error error.response.query_execution.status.state_change_reason
+        end
+
+        def output_explain_result(result_set)
+          result_set.rows.drop(1).each do |row|
+            puts row.data.first.var_char_value
+          end
         end
 
       end
