@@ -34,6 +34,18 @@ module Swa
         version.get.body
       end
 
+      def download_into(file_name, &progress_callback)
+        downloader = Aws::S3::FileDownloader.new(client: aws_resource.client)
+        options = {
+          bucket: version.bucket_name,
+          key: version.object_key,
+          version_id: version.id,
+          progress_callback: progress_callback,
+        }
+        # options[:progress_callback] = progress_callback if progress_callback
+        downloader.download(file_name, options)
+      end
+
       def delete
         version.delete
       end

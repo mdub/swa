@@ -117,6 +117,27 @@ module Swa
 
             end
 
+            subcommand "download", "download version to local file" do
+
+              option %w(-T --to), "TARGET", "file or directory to download into", default: ".", attribute_name: :target
+
+              def execute
+                version.download_into(target_file_path)
+                logger.info "Downloaded to #{target_file_path}"
+              end
+
+              private
+
+              def target_file_path
+                if File.directory?(target)
+                  File.join(target, File.basename(object_key))
+                else
+                  target
+                end
+              end
+
+            end
+
             protected
 
             def version
