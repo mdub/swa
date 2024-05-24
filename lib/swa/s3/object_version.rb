@@ -42,7 +42,6 @@ module Swa
           version_id: version.id,
           progress_callback: progress_callback,
         }
-        # options[:progress_callback] = progress_callback if progress_callback
         downloader.download(file_name, options)
       end
 

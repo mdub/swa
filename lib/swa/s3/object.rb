@@ -30,8 +30,8 @@ module Swa
         object.get.body
       end
 
-      def download_into(file_name)
-        object.download_file(file_name)
+      def download_into(file_name, &progress_callback)
+        object.download_file(file_name, progress_callback: progress_callback)
       end
 
       def put(io, options = {})

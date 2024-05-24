@@ -78,7 +78,7 @@ module Swa
             option %w(-T --to), "TARGET", "file or directory to download into", default: ".", attribute_name: :target
 
             def execute
-              object.download_into(target_file_path)
+              object.download_into(target_file_path, &method(:log_download_progress))
               logger.info "Downloaded to #{target_file_path}"
             end
 
@@ -303,6 +303,12 @@ module Swa
       def query_for(query_method, resource_model)
         aws_resources = s3.public_send(query_method)
         resource_model.list(aws_resources)
+      end
+
+      def log_download_progress(bytes, part_sizes, file_size)
+        # total_bytes = bytes.sum
+        # percent_done = "%.1f" % [100.0 * total_bytes / file_size]
+        # logger.debug "Downloaded #{total_bytes} of #{file_size}; #{percent_done}% done"
       end
 
     end
