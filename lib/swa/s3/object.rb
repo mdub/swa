@@ -30,11 +30,15 @@ module Swa
         object.get.body
       end
 
+      def download_into(file_name)
+        object.download_file(file_name)
+      end
+
       def put(io, options = {})
         object.put(options.merge(:body => io))
       end
 
-      def upload(file_name)
+      def upload_from(file_name)
         object.upload_file(file_name)
       end
 

@@ -68,7 +68,28 @@ module Swa
             parameter "FILE", "file name", :attribute_name => :file_name
 
             def execute
-              object.upload(file_name)
+              object.upload_from(file_name)
+            end
+
+          end
+
+          subcommand "download", "download object to local file" do
+
+            option %w(-T --to), "TARGET", "file or directory to download into", default: ".", attribute_name: :target
+
+            def execute
+              object.download_into(target_file_path)
+              logger.info "Downloaded to #{target_file_path}"
+            end
+
+            private
+
+            def target_file_path
+              if File.directory?(target)
+                File.join(target, File.basename(object_key))
+              else
+                target
+              end
             end
 
           end
