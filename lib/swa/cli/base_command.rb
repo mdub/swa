@@ -27,6 +27,8 @@ module Swa
         super(arguments)
       rescue Aws::Errors::MissingCredentialsError
         signal_error "no credentials provided"
+      rescue Aws::Errors::InvalidProcessCredentialsPayload => e
+        signal_error e.message
       rescue Aws::Errors::MissingRegionError, Aws::Errors::InvalidRegionError => e
         signal_error e.message
       rescue Aws::Errors::ServiceError => e
