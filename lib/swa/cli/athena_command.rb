@@ -56,6 +56,44 @@ module Swa
 
       end
 
+      module CanOutputResults
+
+        extend Clamp::Option::Declaration
+
+        option ["--text", "-1"], :flag, "output first column as text"
+
+        def display_query_results(query_results)
+          output_rows(
+            query_results.lazy.flat_map do |results|
+              results.result_set.rows
+            end
+          )
+        end
+
+        def output_rows(rows)
+          if text?
+            output_rows_as_text(rows)
+          else
+            output_rows_as_csv(rows)
+          end
+        end
+
+        def output_rows_as_csv(rows)
+          CSV($stdout.dup) do |csv|
+            rows.each do |row|
+              csv << row.data.map(&:var_char_value)
+            end
+          end
+        end
+
+        def output_rows_as_text(rows)
+          rows.drop(1).each do |row|
+            puts row.data.first.var_char_value
+          end
+        end
+
+      end
+
       subcommand ["execution", "query-execution"], "Inspect query execution" do
 
         parameter "ID", "execution ID", attribute_name: :execution_id
@@ -72,9 +110,10 @@ module Swa
 
         subcommand "results", "Show results" do
 
+          include CanOutputResults
+
           def execute
-            query_results = athena_client.get_query_results(query_execution_id: execution_id)
-            output_results_as_csv(query_results.result_set)
+            display_query_results(athena_client.get_query_results(query_execution_id: execution_id))
           end
 
         end
@@ -96,6 +135,8 @@ module Swa
         option ["--database", "-D"], "NAME", "Database name"
         option ["--output-location", "-O"], "S3_URL", "S3 output location for query results"
 
+        include CanOutputResults
+
         parameter "[QUERY]", "SQL query", :default => "STDIN"
 
         def execute
@@ -111,12 +152,7 @@ module Swa
             work_group: workgroup
           )
           wait_for_query(start_query_response.query_execution_id)
-          query_results = athena_client.get_query_results(query_execution_id: start_query_response.query_execution_id)
-          if query =~ /\AEXPLAIN/
-            output_explain_result(query_results.result_set)
-          else
-            output_results_as_csv(query_results.result_set)
-          end
+          display_query_results(athena_client.get_query_results(query_execution_id: start_query_response.query_execution_id))
         end
 
         private
@@ -129,12 +165,6 @@ module Swa
           QueryCompletionWaiter.new(client: athena_client).wait(query_execution_id: query_execution_id)
         rescue Aws::Waiters::Errors::FailureStateError => error
           signal_error error.response.query_execution.status.state_change_reason
-        end
-
-        def output_explain_result(result_set)
-          result_set.rows.drop(1).each do |row|
-            puts row.data.first.var_char_value
-          end
         end
 
       end
@@ -159,14 +189,6 @@ module Swa
 
       def query_for(query_method, response_key, model, **query_args)
         model.list_from_query(athena_client, query_method, response_key, **query_args)
-      end
-
-      def output_results_as_csv(result_set)
-        CSV($stdout.dup) do |csv|
-          result_set.rows.each do |row|
-            csv << row.data.map(&:var_char_value)
-          end
-        end
       end
 
       class QueryCompletionWaiter
