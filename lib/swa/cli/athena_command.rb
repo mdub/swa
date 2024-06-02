@@ -1,4 +1,5 @@
 require "aws-sdk-athena"
+require "bytesize"
 require "csv"
 require "swa/cli/base_command"
 require "swa/cli/collection_behaviour"
@@ -151,7 +152,8 @@ module Swa
             },
             work_group: workgroup
           )
-          wait_for_query(start_query_response.query_execution_id)
+          query_execution_output = wait_for_query(start_query_response.query_execution_id)
+          show_statistics(query_execution_output.query_execution.statistics)
           display_query_results(athena_client.get_query_results(query_execution_id: start_query_response.query_execution_id))
         end
 
@@ -165,6 +167,11 @@ module Swa
           QueryCompletionWaiter.new(client: athena_client).wait(query_execution_id: query_execution_id)
         rescue Aws::Waiters::Errors::FailureStateError => error
           signal_error error.response.query_execution.status.state_change_reason
+        end
+
+        def show_statistics(statistics)
+          logger.debug "Total execution time = #{statistics.total_execution_time_in_millis} ms"
+          logger.debug "Data scanned = #{ByteSize.bytes(statistics.data_scanned_in_bytes)}"
         end
 
       end
