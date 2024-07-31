@@ -24,6 +24,12 @@ module Swa
           value
         end
 
+        option ["--resource", "-R"], "TYPE", "Resource type", attribute_name: :resource_filter do |value|
+          parse_resource_filter(value)
+        end
+
+        option ["--principal", "-P"], "ARN", "Principal ARN"
+
         include CollectionBehaviour
 
         private
@@ -31,7 +37,35 @@ module Swa
         def collection
           query_args = {}
           query_args[:resource_type] = type if type
+          if resource_filter
+            query_args[:resource] = resource_filter
+          end
+          if principal
+            query_args[:principal] = {
+              data_lake_principal_identifier: principal
+            }
+          end
           query_for(:list_permissions, :principal_resource_permissions, Swa::LakeFormation::Permission, **query_args)
+        end
+
+        def parse_resource_filter(value)
+          case value
+          when /\A(\w+)\z/
+            {
+              database: {
+                name: value
+              }
+            }
+          when /\A(\w+)\.(\w+)\z/
+            {
+              table: {
+                database_name: $1,
+                name: $2
+              }
+            }
+          else
+            raise ArgumentError, "Invalid resource filter: #{value.inspect}"
+          end
         end
 
       end
