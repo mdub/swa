@@ -16,14 +16,6 @@ module Swa
           List permissions.
         EOF
 
-        ALLOWED_RESOURCE_TYPES = %w(CATALOG DATABASE TABLE DATA_LOCATION LF_TAG LF_TAG_POLICY LF_TAG_POLICY_DATABASE LF_TAG_POLICY_TABLE)
-
-        option ["--type", "-T"], "TYPE", "Resource type" do |value|
-          value = value.upcase
-          raise ArgumentError, "Invalid resource type: #{value}" unless ALLOWED_RESOURCE_TYPES.include?(value)
-          value
-        end
-
         option ["--resource", "-R"], "TYPE", "Resource", attribute_name: :resource_filter do |value|
           parse_resource_filter(value)
         end
@@ -36,7 +28,6 @@ module Swa
 
         def collection
           query_args = {}
-          query_args[:resource_type] = type if type
           if resource_filter
             query_args[:resource] = resource_filter
           end
