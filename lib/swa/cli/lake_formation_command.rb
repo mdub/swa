@@ -24,7 +24,7 @@ module Swa
           value
         end
 
-        option ["--resource", "-R"], "TYPE", "Resource type", attribute_name: :resource_filter do |value|
+        option ["--resource", "-R"], "TYPE", "Resource", attribute_name: :resource_filter do |value|
           parse_resource_filter(value)
         end
 
@@ -56,13 +56,18 @@ module Swa
                 name: value
               }
             }
-          when /\A(\w+)\.(\w+)\z/
+          when /\A(\w+)\.(\w+|\*)\z/
             {
               table: {
                 database_name: $1,
                 name: $2
               }
-            }
+            }.tap do |filter|
+              if $2 == "*"
+                filter[:table].delete(:name)
+                filter[:table][:table_wildcard] = {}
+              end
+            end
           else
             raise ArgumentError, "Invalid resource filter: #{value.inspect}"
           end
