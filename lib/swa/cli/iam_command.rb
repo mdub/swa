@@ -214,6 +214,28 @@ module Swa
 
         end
 
+        subcommand ["simulate"], "Simulate an action" do
+
+          parameter "ACTION ...", "action to simulate"
+
+          option %w(--resource -R), "RESOURCE", "resource ARN", :multivalued => true do |arg|
+            arg.sub(%r(\As3://), "arn:aws:s3:::")
+          end
+
+          def execute
+            evaluation_results = iam.client.simulate_principal_policy(
+              policy_source_arn: role.arn,
+              action_names: action_list,
+              resource_arns: resource_list
+            ).each.flat_map(&:evaluation_results).map { |result| stringify_keys(result.to_h) }
+            display_data(evaluation_results)
+          end
+
+          include DataPresentation
+
+
+        end
+
         subcommand "trust-policy", "print AssumeRolePolicyDocument" do
 
           self.default_subcommand = "data"
