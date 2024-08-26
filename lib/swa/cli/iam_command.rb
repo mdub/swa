@@ -180,6 +180,18 @@ module Swa
 
         end
 
+        subcommand ["attached-policies"], "Show attached managed policies." do
+
+          include CollectionBehaviour
+
+          private
+
+          def collection
+            role.attached_policies
+          end
+
+        end
+
         subcommand ["policies"], "Show role policies." do
 
           include CollectionBehaviour

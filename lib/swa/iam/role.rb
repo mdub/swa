@@ -1,5 +1,6 @@
 require "swa/resource"
 require "swa/iam/credentials"
+require "swa/iam/policy"
 require "swa/iam/role_policy"
 require "uri"
 
@@ -18,6 +19,10 @@ module Swa
 
       def summary
         role.name
+      end
+
+      def attached_policies
+        Policy.list(role.attached_policies)
       end
 
       def policies
