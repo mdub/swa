@@ -33,11 +33,27 @@ module Swa
 
         alias_method :item, :bucket
 
+        subcommand "arn", "Display ARN" do
+
+          def execute
+            puts "arn:aws:s3:::#{bucket_name}"
+          end
+
+        end
+
         subcommand "object", "Show object" do
 
           parameter "KEY", "object key", :attribute_name => :object_key
 
           include ItemBehaviour
+
+          subcommand "arn", "Display ARN" do
+
+            def execute
+              puts "arn:aws:s3:::#{bucket_name}/#{object_key}"
+            end
+
+          end
 
           subcommand "get", "GET object" do
 
