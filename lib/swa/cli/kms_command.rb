@@ -34,6 +34,27 @@ module Swa
           Swa::KMS::Key.new(kms_client.describe_key(:key_id => id).key_metadata)
         end
 
+        subcommand ["policies"], "Show key policies" do
+
+          def execute
+            policy_names = kms_client.list_key_policies(key_id: id).lazy.flat_map(&:policy_names)
+            puts(*policy_names)
+          end
+
+        end
+
+        subcommand ["policy"], "Show named key policy" do
+
+          parameter "NAME", "policy name"
+
+          def execute
+            policy = kms_client.get_key_policy(key_id: id, policy_name: name)
+            policy_data = MultiJson.load(policy.policy)
+            display_data(policy_data)
+          end
+
+        end
+
       end
 
       subcommand ["keys"], "Show keys" do
