@@ -16,7 +16,7 @@ module Swa
           List permissions.
         EOF
 
-        option ["--resource", "-R"], "TYPE", "Resource", attribute_name: :resource_filter do |value|
+        option ["--resource", "-R"], "DATABASE[.TABLE]", "Resource", attribute_name: :resource_filter do |value|
           parse_resource_filter(value)
         end
 
