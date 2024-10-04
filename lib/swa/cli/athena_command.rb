@@ -135,12 +135,17 @@ module Swa
 
         option ["--database", "-D"], "NAME", "Database name"
         option ["--output-location", "-O"], "S3_URL", "S3 output location for query results"
+        option ["--explain", "-E"], :flag, "Explain query"
 
         include CanOutputResults
 
         parameter "[QUERY]", "SQL query", :default => "STDIN"
 
         def execute
+          if explain?
+            self.query = "EXPLAIN #{query}"
+            self.text = true
+          end
           start_query_response = athena_client.start_query_execution(
             query_execution_context: {
               catalog: catalog,
