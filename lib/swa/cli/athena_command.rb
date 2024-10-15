@@ -146,6 +146,18 @@ module Swa
             self.query = "EXPLAIN #{query}"
             self.text = true
           end
+          results, statistics = execute_query(query)
+          show_statistics(statistics)
+          display_query_results(results)
+        end
+
+        private
+
+        def default_query
+          $stdin.read
+        end
+
+        def execute_query(query)
           start_query_response = athena_client.start_query_execution(
             query_execution_context: {
               catalog: catalog,
@@ -157,15 +169,18 @@ module Swa
             },
             work_group: workgroup
           )
-          query_execution_output = wait_for_query(start_query_response.query_execution_id)
-          show_statistics(query_execution_output.query_execution.statistics)
-          display_query_results(athena_client.get_query_results(query_execution_id: start_query_response.query_execution_id))
-        end
-
-        private
-
-        def default_query
-          $stdin.read
+          query_execution_id = start_query_response.query_execution_id
+          logger.debug "query_execution_id = #{query_execution_id}"
+          query_still_running = true
+          query_execution_output = wait_for_query(query_execution_id)
+          query_still_running = false
+          results = athena_client.get_query_results(query_execution_id: query_execution_id)
+          return results, query_execution_output.query_execution.statistics
+        ensure
+          if query_still_running
+            logger.warn "Cancelling query #{query_execution_id}"
+            athena_client.stop_query_execution(query_execution_id: query_execution_id)
+          end
         end
 
         def wait_for_query(query_execution_id)
