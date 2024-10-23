@@ -176,6 +176,9 @@ module Swa
           query_still_running = false
           results = athena_client.get_query_results(query_execution_id: query_execution_id)
           return results, query_execution_output.query_execution.statistics
+        rescue Aws::Waiters::Errors::FailureStateError => error
+          query_still_running = false
+          signal_error error.response.query_execution.status.state_change_reason
         ensure
           if query_still_running
             logger.warn "Cancelling query #{query_execution_id}"
@@ -185,8 +188,6 @@ module Swa
 
         def wait_for_query(query_execution_id)
           QueryCompletionWaiter.new(client: athena_client).wait(query_execution_id: query_execution_id)
-        rescue Aws::Waiters::Errors::FailureStateError => error
-          signal_error error.response.query_execution.status.state_change_reason
         end
 
         def show_statistics(statistics)
