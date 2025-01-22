@@ -136,6 +136,7 @@ module Swa
         option ["--database", "-D"], "NAME", "Database name"
         option ["--output-location", "-O"], "S3_URL", "S3 output location for query results"
         option ["--explain", "-E"], :flag, "Explain query"
+        option ["--timeout"], "SECONDS", "Time to wait for completion", default: 120, &method(:Integer)
 
         include CanOutputResults
 
@@ -187,7 +188,13 @@ module Swa
         end
 
         def wait_for_query(query_execution_id)
-          QueryCompletionWaiter.new(client: athena_client).wait(query_execution_id: query_execution_id)
+          poll_interval = 5
+          max_attempts = timeout / poll_interval
+          QueryCompletionWaiter.new(
+            client: athena_client,
+            max_attempts: max_attempts,
+            delay: poll_interval
+          ).wait(query_execution_id: query_execution_id)
         end
 
         def show_statistics(statistics)
