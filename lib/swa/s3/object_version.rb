@@ -8,8 +8,8 @@ module Swa
       def summary
         [
           version.last_modified.iso8601,
-          rpad(version.size, 10),
-          pad(version.id, 32),
+          rpad(size, 10),
+          pad(id, 32),
           uri
         ].join("  ")
       end
@@ -20,6 +20,10 @@ module Swa
 
       def id
         version.id
+      end
+
+      def size
+        version.data.to_h.fetch(:size, '-')
       end
 
       def uri
