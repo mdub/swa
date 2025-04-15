@@ -13,7 +13,6 @@ require "swa/glue/table"
 
 module Swa
   module CLI
-
     class GlueCommand < BaseCommand
 
       subcommand ["crawler"], "Show crawler" do
@@ -56,6 +55,8 @@ module Swa
 
       subcommand ["database"], "Show database" do
 
+        option %w(--catalog), "NAME", "Catalog ID"
+
         parameter "NAME", "database name"
 
         include ItemBehaviour
@@ -63,13 +64,13 @@ module Swa
         private
 
         def item
-          Swa::Glue::Database.new(glue_client.get_database(:name => name).database)
+          Swa::Glue::Database.new(glue_client.get_database(:catalog_id => catalog, :name => name).database)
         end
 
         subcommand ["delete"], "Delete database" do
 
           def execute
-            glue_client.delete_database(:name => name)
+            glue_client.delete_database(:name => name, **catalog_constraint)
           end
 
         end
@@ -87,7 +88,7 @@ module Swa
             private
 
             def collection
-              query_for(:get_partitions, :partitions, Swa::Glue::Partition, :database_name => name, :table_name => table_name)
+              query_for(:get_partitions, :partitions, Swa::Glue::Partition, :catalog_id => catalog, :database_name => name, :table_name => table_name)
             end
 
           end
@@ -95,7 +96,7 @@ module Swa
           subcommand ["delete"], "Delete table" do
 
             def execute
-              glue_client.delete_table(:database_name => name, :name => table_name)
+              glue_client.delete_table(:catalog_id => catalog, :database_name => name, :name => table_name)
             end
 
           end
@@ -104,7 +105,7 @@ module Swa
 
           def item
             Swa::Glue::Table.new(glue_client.get_table(
-              :database_name => name, :name => table_name
+              :catalog_id => catalog, :database_name => name, :name => table_name
             ).table)
           end
 
@@ -117,7 +118,7 @@ module Swa
           private
 
           def collection
-            query_for(:get_tables, :table_list, Swa::Glue::Table, :database_name => name)
+            query_for(:get_tables, :table_list, Swa::Glue::Table, :catalog_id => catalog, :database_name => name)
           end
 
         end
@@ -126,12 +127,14 @@ module Swa
 
       subcommand ["databases"], "Show databases" do
 
+        option %w(--catalog), "NAME", "Catalog ID"
+
         include CollectionBehaviour
 
         private
 
         def collection
-          query_for(:get_databases, :database_list, Swa::Glue::Database)
+          query_for(:get_databases, :database_list, Swa::Glue::Database, :catalog_id => catalog)
         end
 
       end
