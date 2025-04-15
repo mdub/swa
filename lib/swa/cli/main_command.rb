@@ -49,7 +49,7 @@ module Swa
           remaining_arguments[0, 1] = ["s3", "bucket", $1, "object", $2]
         when %r{^s3://([^/]+)$}
           remaining_arguments[0, 1] = ["s3", "bucket", $1]
-        when %r{^arn:aws:iam::aws:policy/}
+        when %r{^arn:aws:iam::.*:policy/}
           remaining_arguments.unshift("iam", "policy")
         end
         super
