@@ -217,6 +217,14 @@ module Swa
         model.list_from_query(glue_client, query_method, response_key, **query_args)
       end
 
+      def parse_parameters
+        case remaining_arguments.first
+        when /^(\w+)\.(\w+)$/
+          remaining_arguments[0, 1] = ["database", $1, "table", $2]
+        end
+        super
+      end
+
     end
 
   end
