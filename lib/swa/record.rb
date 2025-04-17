@@ -11,7 +11,7 @@ module Swa
 
     def self.list_from_query(client, query_method, response_key, **query_args)
       records = client.public_send(query_method, **query_args).each.lazy.flat_map { |page|
-        page.public_send(response_key)
+        response_key ? page.public_send(response_key) : page
       }
       list(records)
     end

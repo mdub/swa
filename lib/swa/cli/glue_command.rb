@@ -101,12 +101,59 @@ module Swa
 
           end
 
+          subcommand ["lf-tags"], "Show associated LakeFormation tags" do
+
+            include CollectionBehaviour
+
+            private
+
+            def collection
+              Swa::LakeFormation::Tag.list_from_query(
+                lf_client, :get_resource_lf_tags, :lf_tags_on_table, resource: lf_resource_spec
+              )
+            end
+
+          end
+
+          subcommand ["lf-permissions"], "Show LakeFormation permissions" do
+
+            option ["--principal", "-P"], "ARN", "Principal ARN"
+
+            include CollectionBehaviour
+
+            private
+
+            def collection
+              query_args = {
+                resource: lf_resource_spec
+              }
+              if principal
+                query_args[:principal] = {
+                  data_lake_principal_identifier: principal
+                }
+              end
+              Swa::LakeFormation::Permission.list_from_query(
+                lf_client, :list_permissions, :principal_resource_permissions, **query_args
+              )
+            end
+
+          end
+
           private
 
           def item
             Swa::Glue::Table.new(glue_client.get_table(
               :catalog_id => catalog, :database_name => name, :name => table_name
             ).table)
+          end
+
+          def lf_resource_spec
+            {
+              table: {
+                database_name: name,
+                name: table_name
+              }
+            }
           end
 
         end
@@ -215,6 +262,10 @@ module Swa
 
       def query_for(query_method, response_key, model, **query_args)
         model.list_from_query(glue_client, query_method, response_key, **query_args)
+      end
+
+      def lf_client
+        ::Aws::LakeFormation::Client.new(aws_config)
       end
 
       def parse_parameters

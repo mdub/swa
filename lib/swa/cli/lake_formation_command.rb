@@ -2,13 +2,49 @@ require "aws-sdk-lakeformation"
 require "swa/cli/base_command"
 require "swa/cli/collection_behaviour"
 require "swa/cli/item_behaviour"
+require "swa/lake_formation/data_lake_settings"
 require "swa/lake_formation/permission"
 require "swa/lake_formation/resource_info"
+require "swa/lake_formation/tag"
 
 module Swa
   module CLI
 
     class LakeFormationCommand < BaseCommand
+
+      subcommand ["data-lake-settings", "settings"], "Show Data Lake Settings" do
+
+        self.default_subcommand = "data"
+
+        include ItemBehaviour
+
+        private
+
+        def item
+          Swa::LakeFormation::DataLakeSettings.new(lf_client.get_data_lake_settings.data_lake_settings)
+        end
+
+        def execute
+          response =
+          display_data(stringify_keys(response.data_lake_settings.to_h))
+        end
+
+      end
+
+      subcommand ["lf-tags", "tags"], "Show LF-Tags" do
+
+        self.description = <<-EOF
+          List LF-Tags.
+        EOF
+
+        include CollectionBehaviour
+
+        private
+
+        def collection
+          query_for(:list_lf_tags, :lf_tags, Swa::LakeFormation::Tag)
+        end
+      end
 
       subcommand ["permissions"], "Show permissions" do
 
