@@ -67,6 +67,14 @@ module Swa
           Swa::Glue::Database.new(glue_client.get_database(:catalog_id => catalog, :name => name).database)
         end
 
+        subcommand ["arn"], "Show database ARN" do
+
+          def execute
+            puts "arn:aws:glue:#{region}:#{item.catalog_id}:database/#{name}"
+          end
+
+        end
+
         subcommand ["delete"], "Delete database" do
 
           def execute

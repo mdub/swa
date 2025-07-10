@@ -9,6 +9,7 @@ module Swa
         name
       end
 
+      delegate :catalog_id
       delegate :name
 
     end
