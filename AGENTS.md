@@ -440,3 +440,7 @@ Based on recent commit history:
 - Catalog specification for Glue resources
 
 The tool appears to be particularly focused on AWS data services (Glue, Athena, LakeFormation) while maintaining broad coverage of core AWS services.
+
+## What next?
+
+To work out what to do, run 'bd onboard' and follow the instructions.
