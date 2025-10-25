@@ -1,4 +1,5 @@
 require "swa/record"
+require "multi_json"
 
 module Swa
   module CloudTrail
@@ -25,6 +26,10 @@ module Swa
 
       def id
         event_id
+      end
+
+      def data
+        MultiJson.load(aws_record.cloud_trail_event)
       end
 
     end
