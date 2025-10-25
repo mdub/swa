@@ -33,6 +33,12 @@ module Swa
           parse_datetime(value).begin
         end
 
+        option "--where", "FIELD=VALUE", "filter by field (can be specified multiple times)", :multivalued => true do |spec|
+          field, value = spec.split("=", 2)
+          raise ArgumentError, "invalid --where format, expected FIELD=VALUE" if field.nil? || value.nil?
+          { field: field, pattern: compile_pattern(value) }
+        end
+
         private
 
         def collection
@@ -56,6 +62,13 @@ module Swa
           events = events.select { |event| name === event.event_name } if name
           events = events.select { |event| source === event.event_source } if source
 
+          # Apply --where filters
+          if where_list && !where_list.empty?
+            events = events.select do |event|
+              where_list.all? { |condition| matches_where_condition?(event, condition) }
+            end
+          end
+
           events.take(max)
         end
 
@@ -68,6 +81,28 @@ module Swa
             # Return as string for exact match and API filtering
             value
           end
+        end
+
+        def matches_where_condition?(event, condition)
+          field_path = condition[:field]
+          pattern = condition[:pattern]
+
+          # Get the event data as a hash
+          event_data = event.data
+
+          # Extract field value using JMESPath
+          begin
+            field_value = JMESPath.search(field_path, event_data)
+          rescue JMESPath::Errors::SyntaxError
+            signal_error("invalid field path in --where: #{field_path}")
+          end
+
+          # Convert field value to string for matching
+          return false if field_value.nil?
+          field_value_str = field_value.to_s
+
+          # Match using pattern (either string or regex)
+          pattern === field_value_str
         end
 
       end
