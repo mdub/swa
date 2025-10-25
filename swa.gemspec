@@ -25,6 +25,7 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency "aws-sdk-athena", "~> 1"
   spec.add_runtime_dependency "aws-sdk-cloudformation", "~> 1"
+  spec.add_runtime_dependency "aws-sdk-cloudtrail", "~> 1"
   spec.add_runtime_dependency "aws-sdk-ec2", "~> 1"
   spec.add_runtime_dependency "aws-sdk-elasticloadbalancing", "~> 1"
   spec.add_runtime_dependency "aws-sdk-glue", "~> 1"

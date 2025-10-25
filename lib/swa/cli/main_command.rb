@@ -1,6 +1,7 @@
 require "swa/cli/base_command"
 require "swa/cli/athena_command"
 require "swa/cli/cloud_formation_command"
+require "swa/cli/cloudtrail_command"
 require "swa/cli/ec2_command"
 require "swa/cli/elb_command"
 require "swa/cli/glue_command"
@@ -16,6 +17,7 @@ module Swa
 
       subcommand "athena", "Athena stuff", AthenaCommand
       subcommand ["cf", "cloudformation"], "CloudFormation stuff", CloudFormationCommand
+      subcommand "cloudtrail", "CloudTrail stuff", CloudtrailCommand
       subcommand "ec2", "EC2 stuff", Ec2Command
       subcommand "elb", "elb stuff", ElbCommand
       subcommand "glue", "Glue stuff", GlueCommand
