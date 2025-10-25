@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "aws-sdk-elasticloadbalancing"
 require "swa/cli/base_command"
 require "swa/cli/collection_behaviour"

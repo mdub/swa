@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Polyfills for older Rubies
 
 class Array

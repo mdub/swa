@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "swa/record"
 require "multi_json"
 

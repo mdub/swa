@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "swa/resource"
 
 module Swa

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "aws-sdk-athena"
 require "bytesize"
 require "csv"

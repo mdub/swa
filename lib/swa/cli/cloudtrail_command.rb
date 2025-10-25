@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "aws-sdk-cloudtrail"
 require "swa/cli/base_command"
 require "swa/cli/collection_behaviour"
@@ -49,9 +51,9 @@ module Swa
 
           # CloudTrail API only supports ONE lookup attribute at a time
           # Use API filter for exact matches (not patterns with wildcards)
-          if name && name.is_a?(String)
+          if name.is_a?(String)
             query_args[:lookup_attributes] = [{ attribute_key: "EventName", attribute_value: name }]
-          elsif source && source.is_a?(String)
+          elsif source.is_a?(String)
             query_args[:lookup_attributes] = [{ attribute_key: "EventSource", attribute_value: source }]
           end
 

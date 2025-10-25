@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "aws-sdk-lakeformation"
 require "swa/cli/base_command"
 require "swa/cli/collection_behaviour"

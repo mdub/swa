@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "chronic"
 require "clamp"
 require "console_logger"

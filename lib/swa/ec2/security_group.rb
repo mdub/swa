@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "swa/ec2/tagged_resource"
 require "swa/resource"
 

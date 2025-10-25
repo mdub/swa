@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "base64"
 require "swa/resource"
 require "swa/ec2/tagged_resource"

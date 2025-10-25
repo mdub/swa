@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "swa/polyfill"
 
 module Swa
@@ -34,7 +36,7 @@ module Swa
       volume_id: 21,
       volume_type: 9,
       vpc_id: 12
-    }
+    }.freeze
 
     def field(resource, field_name, type = field_name)
       width = WIDTH_BY_TYPE.fetch(type.to_sym)

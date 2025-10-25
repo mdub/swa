@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "swa/resource"
 require "swa/s3/object_version"
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "swa/cli/filter_options"
 
 module Swa

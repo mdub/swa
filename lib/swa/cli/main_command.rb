@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "swa/cli/base_command"
 require "swa/cli/athena_command"
 require "swa/cli/cloud_formation_command"
@@ -31,7 +33,7 @@ module Swa
 
       RESOURCE_PREFIXES_BY_SERVICE = {
         "ec2" => %w[ami i sg subnet vpc]
-      }
+      }.freeze
 
       def subcommand_for_prefix(prefix)
         RESOURCE_PREFIXES_BY_SERVICE.each do |subcommand, prefixes|

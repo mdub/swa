@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "swa/resource"
 require "swa/ec2/tagged_resource"
 
@@ -30,7 +32,7 @@ module Swa
 
       def delete
         ebs_snapshot_ids = ami.block_device_mappings.map do |mapping|
-          mapping.ebs.snapshot_id if mapping.ebs
+          mapping.ebs&.snapshot_id
         end.compact
         deregister
         ebs_snapshot_ids.each do |snapshot_id|
