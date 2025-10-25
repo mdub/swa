@@ -12,14 +12,14 @@ module Swa
 
         include CollectionBehaviour
 
-        option "--limit", "N", "number of events to return", default: 50 do |n|
+        option "--max", "N", "number of events to return", default: 50 do |n|
           Integer(n)
         end
 
         private
 
         def collection
-          query_for(:lookup_events, :events, Swa::CloudTrail::Event).take(limit)
+          query_for(:lookup_events, :events, Swa::CloudTrail::Event).take(max)
         end
 
       end
