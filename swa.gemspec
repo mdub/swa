@@ -33,6 +33,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "aws-sdk-lakeformation", "~> 1"
   spec.add_runtime_dependency "aws-sdk-s3", "~> 1"
   spec.add_runtime_dependency "csv"
+  spec.add_runtime_dependency "openssl", ">= 3.3.1"
   spec.add_runtime_dependency "pry"
 
   spec.add_runtime_dependency "bytesize"
