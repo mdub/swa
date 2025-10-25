@@ -10,20 +10,25 @@ module Swa
         [
           pad(event_time, 25),
           pad(event_id, 36),
-          [event_source,event_name].join(":")
+          qualified_event_name
         ].join("  ")
       end
 
       delegate :event_id
       delegate :event_name
+      delegate :event_source
       delegate :username
 
       def event_time
         aws_record.event_time.iso8601
       end
 
-      def event_source
-        aws_record.event_source.sub(/\.amazonaws\.com\z/, "")
+      def abbreviated_event_source
+        event_source.sub(/\.amazonaws\.com\z/, "")
+      end
+
+      def qualified_event_name
+        [abbreviated_event_source, event_name].join(":")
       end
 
       def id
