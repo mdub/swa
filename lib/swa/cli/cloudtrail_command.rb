@@ -8,7 +8,7 @@ module Swa
 
     class CloudtrailCommand < BaseCommand
 
-      subcommand "query", "Query CloudTrail events" do
+      subcommand "events", "CloudTrail events" do
 
         include CollectionBehaviour
 
