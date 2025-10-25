@@ -25,6 +25,14 @@ module Swa
           compile_pattern(value)
         end
 
+        option %w[-a --after], "TIME", "filter events after this time" do |value|
+          parse_datetime(value).end
+        end
+
+        option %w[-b --before], "TIME", "filter events before this time" do |value|
+          parse_datetime(value).begin
+        end
+
         private
 
         def collection
@@ -37,6 +45,10 @@ module Swa
           elsif source && source.is_a?(String)
             query_args[:lookup_attributes] = [{ attribute_key: "EventSource", attribute_value: source }]
           end
+
+          # Add time range filters
+          query_args[:start_time] = after if after
+          query_args[:end_time] = before if before
 
           events = query_for(:lookup_events, :events, Swa::CloudTrail::Event, **query_args)
 
