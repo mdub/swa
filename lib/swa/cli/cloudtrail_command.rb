@@ -12,7 +12,7 @@ module Swa
 
         include CollectionBehaviour
 
-        option "--max", "N", "number of events to return", default: 50 do |n|
+        option ["-n", "--max"], "N", "number of events to return", default: 50 do |n|
           Integer(n)
         end
 
