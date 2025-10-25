@@ -19,7 +19,7 @@ module Swa
         private
 
         def collection
-          query_for(:lookup_events, :events, Swa::CloudTrail::Event, max_results: limit)
+          query_for(:lookup_events, :events, Swa::CloudTrail::Event).take(limit)
         end
 
       end
