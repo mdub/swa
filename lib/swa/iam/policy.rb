@@ -2,6 +2,7 @@ require "cgi"
 require "swa/resource"
 
 module Swa
+
   module IAM
 
     class Policy < Resource
@@ -21,11 +22,10 @@ module Swa
         CGI.unescape(policy.default_version.document)
       end
 
-      private
-
-      alias_method :policy, :aws_resource
+      alias policy aws_resource
 
     end
 
   end
+
 end

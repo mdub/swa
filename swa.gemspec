@@ -1,7 +1,6 @@
-# coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path("lib", __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'swa/version'
+require "swa/version"
 
 Gem::Specification.new do |spec|
 
@@ -10,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Mike Williams"]
   spec.email         = ["mdub@dogbiscuit.org"]
 
-  spec.summary       = %q{AWS, backwards}
+  spec.summary       = "AWS, backwards"
 
   spec.homepage      = "https://github.com/mdub/swa"
   spec.license       = "MIT"

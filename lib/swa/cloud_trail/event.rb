@@ -2,6 +2,7 @@ require "swa/record"
 require "multi_json"
 
 module Swa
+
   module CloudTrail
 
     class Event < Record
@@ -42,4 +43,5 @@ module Swa
     end
 
   end
+
 end

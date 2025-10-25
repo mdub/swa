@@ -1,6 +1,7 @@
 require "swa/resource"
 
 module Swa
+
   module EC2
 
     class KeyPair < Resource
@@ -25,4 +26,5 @@ module Swa
     end
 
   end
+
 end

@@ -1,6 +1,7 @@
 require "swa/record"
 
 module Swa
+
   module Glue
 
     class Crawl < Record
@@ -18,8 +19,9 @@ module Swa
       delegate :state
       delegate :start_time
       delegate :end_time
-      
+
     end
 
   end
+
 end

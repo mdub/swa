@@ -1,20 +1,17 @@
 module Swa
+
   module IAM
 
     class Credentials
 
       def initialize(attributes = {})
-        attributes.to_h.each do |k,v|
+        attributes.to_h.each do |k, v|
           send("#{k}=", v)
         end
       end
 
-      attr_accessor :access_key_id
-      attr_accessor :secret_access_key
-      attr_accessor :session_token
-
-      attr_accessor :expires_at
-      alias :expiration= :expires_at=
+      attr_accessor :access_key_id, :secret_access_key, :session_token, :expires_at
+      alias expiration= expires_at=
 
       def to_env
         {
@@ -28,4 +25,5 @@ module Swa
     end
 
   end
+
 end

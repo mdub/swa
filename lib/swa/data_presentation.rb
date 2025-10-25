@@ -21,19 +21,19 @@ module Swa
     end
 
     WIDTH_BY_TYPE = {
-      :availability_zone => 15,
-      :cidr_block => 18,
-      :group_id => 11,
-      :image_id => 12,
-      :instance_id => 19,
-      :instance_type => 10,
-      :private_ip_address => 14,
-      :public_ip_address => 14,
-      :snapshot_id => 22,
-      :subnet_id => 15,
-      :volume_id => 21,
-      :volume_type => 9,
-      :vpc_id => 12
+      availability_zone: 15,
+      cidr_block: 18,
+      group_id: 11,
+      image_id: 12,
+      instance_id: 19,
+      instance_type: 10,
+      private_ip_address: 14,
+      public_ip_address: 14,
+      snapshot_id: 22,
+      subnet_id: 15,
+      volume_id: 21,
+      volume_type: 9,
+      vpc_id: 12
     }
 
     def field(resource, field_name, type = field_name)
@@ -42,11 +42,10 @@ module Swa
       pad(value, width)
     end
 
-
     def stringify_keys(data)
       case data
       when Hash
-        data.map { |k,v| [k.to_s, stringify_keys(v)] }.to_h
+        data.map { |k, v| [k.to_s, stringify_keys(v)] }.to_h
       when Array
         data.map { |v| stringify_keys(v) }
       else

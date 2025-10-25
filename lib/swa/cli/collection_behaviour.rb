@@ -1,12 +1,12 @@
 require "swa/cli/selector"
 
 module Swa
+
   module CLI
 
     module CollectionBehaviour
 
       def self.included(target)
-
         target.default_subcommand = "summary"
 
         target.subcommand ["summary", "s"], "One-line summary" do
@@ -36,7 +36,6 @@ module Swa
           end
 
         end
-
       end
 
       def selector
@@ -50,4 +49,5 @@ module Swa
     end
 
   end
+
 end

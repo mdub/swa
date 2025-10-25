@@ -3,6 +3,7 @@ require "swa/resource"
 require "yaml"
 
 module Swa
+
   module CloudFormation
 
     class Stack < Resource
@@ -47,7 +48,7 @@ module Swa
 
       private
 
-      alias_method :stack, :aws_resource
+      alias stack aws_resource
 
       def stackup_stack
         Stackup::Stack.new(name, stack.client)
@@ -56,4 +57,5 @@ module Swa
     end
 
   end
+
 end

@@ -1,6 +1,7 @@
 require "swa/resource"
 
 module Swa
+
   module EC2
 
     module TaggedResource
@@ -14,4 +15,5 @@ module Swa
     end
 
   end
+
 end

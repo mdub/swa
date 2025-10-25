@@ -5,6 +5,7 @@ require "swa/cli/item_behaviour"
 require "swa/elb/load_balancer"
 
 module Swa
+
   module CLI
 
     class ElbCommand < BaseCommand
@@ -18,7 +19,7 @@ module Swa
         private
 
         def item
-          results = describe_load_balancers(:load_balancer_names => [name])
+          results = describe_load_balancers(load_balancer_names: [name])
           signal_error "No such ELB '#{name}'" unless results.any?
           Swa::ELB::LoadBalancer.new(results.first)
         end
@@ -28,8 +29,6 @@ module Swa
       subcommand ["load-balancers", "lbs"], "Show load-balancers" do
 
         include CollectionBehaviour
-
-        private
 
         def collection
           Swa::ELB::LoadBalancer.list(describe_load_balancers)
@@ -50,4 +49,5 @@ module Swa
     end
 
   end
+
 end

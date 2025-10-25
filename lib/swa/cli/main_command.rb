@@ -11,25 +11,26 @@ require "swa/cli/lake_formation_command"
 require "swa/cli/s3_command"
 
 module Swa
+
   module CLI
 
     class MainCommand < BaseCommand
 
       subcommand "athena", "Athena stuff", AthenaCommand
-      subcommand ["cf", "cloudformation"], "CloudFormation stuff", CloudFormationCommand
+      subcommand %w[cf cloudformation], "CloudFormation stuff", CloudFormationCommand
       subcommand "cloudtrail", "CloudTrail stuff", CloudtrailCommand
       subcommand "ec2", "EC2 stuff", Ec2Command
       subcommand "elb", "elb stuff", ElbCommand
       subcommand "glue", "Glue stuff", GlueCommand
       subcommand "iam", "IAM stuff", IamCommand
       subcommand "kms", "KMS stuff", KmsCommand
-      subcommand ["lf", "lakeformation"], "LakeFormation stuff", LakeFormationCommand
+      subcommand %w[lf lakeformation], "LakeFormation stuff", LakeFormationCommand
       subcommand "s3", "S3 stuff", S3Command
 
       protected
 
       RESOURCE_PREFIXES_BY_SERVICE = {
-        "ec2" => %w(ami i sg subnet vpc)
+        "ec2" => %w[ami i sg subnet vpc]
       }
 
       def subcommand_for_prefix(prefix)
@@ -41,16 +42,18 @@ module Swa
       def parse_parameters
         case remaining_arguments.first
         when /^(\w+)-/
-          subcommand = subcommand_for_prefix($1)
+          subcommand = subcommand_for_prefix(::Regexp.last_match(1))
           remaining_arguments.unshift(subcommand) if subcommand
         when %r{^s3://([^/]+)/(.+/)?$}
-          remaining_arguments[0, 1] = ["s3", "bucket", $1, "objects", "--prefix", $2]
+          remaining_arguments[0, 1] =
+            ["s3", "bucket", ::Regexp.last_match(1), "objects", "--prefix", ::Regexp.last_match(2)]
         when %r{^s3://([^/]+)/(.+)\*$}
-          remaining_arguments[0, 1] = ["s3", "bucket", $1, "objects", "--prefix", $2]
+          remaining_arguments[0, 1] =
+            ["s3", "bucket", ::Regexp.last_match(1), "objects", "--prefix", ::Regexp.last_match(2)]
         when %r{^s3://([^/]+)/(.+)$}
-          remaining_arguments[0, 1] = ["s3", "bucket", $1, "object", $2]
+          remaining_arguments[0, 1] = ["s3", "bucket", ::Regexp.last_match(1), "object", ::Regexp.last_match(2)]
         when %r{^s3://([^/]+)$}
-          remaining_arguments[0, 1] = ["s3", "bucket", $1]
+          remaining_arguments[0, 1] = ["s3", "bucket", ::Regexp.last_match(1)]
         when %r{^arn:aws:iam::.*:policy/}
           remaining_arguments.unshift("iam", "policy")
         end
@@ -60,4 +63,5 @@ module Swa
     end
 
   end
+
 end

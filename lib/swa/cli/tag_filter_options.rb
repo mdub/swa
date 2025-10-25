@@ -1,6 +1,7 @@
 require "swa/cli/filter_options"
 
 module Swa
+
   module CLI
 
     module TagFilterOptions
@@ -10,9 +11,9 @@ module Swa
       include FilterOptions
 
       option "--tagged", "KEY[=VALUE]", "with matching tag",
-             :multivalued => true, :attribute_name => :tag_list
+             multivalued: true, attribute_name: :tag_list
       option "--not-tagged", "KEY[=VALUE]", "WITHOUT matching tag",
-             :multivalued => true, :attribute_name => :tag_blacklist
+             multivalued: true, attribute_name: :tag_blacklist
 
       option "--stack", "NAME", "from the named CloudFormation stack"
 
@@ -54,4 +55,5 @@ module Swa
     end
 
   end
+
 end

@@ -8,6 +8,7 @@ require "swa/lake_formation/resource_info"
 require "swa/lake_formation/tag"
 
 module Swa
+
   module CLI
 
     class LakeFormationCommand < BaseCommand
@@ -25,7 +26,6 @@ module Swa
         end
 
         def execute
-          response =
           display_data(stringify_keys(response.data_lake_settings.to_h))
         end
 
@@ -38,8 +38,6 @@ module Swa
         EOF
 
         include CollectionBehaviour
-
-        private
 
         def collection
           query_for(:list_lf_tags, :lf_tags, Swa::LakeFormation::Tag)
@@ -60,13 +58,9 @@ module Swa
 
         include CollectionBehaviour
 
-        private
-
         def collection
           query_args = {}
-          if resource_filter
-            query_args[:resource] = resource_filter
-          end
+          query_args[:resource] = resource_filter if resource_filter
           if principal
             query_args[:principal] = {
               data_lake_principal_identifier: principal
@@ -86,11 +80,11 @@ module Swa
           when /\A(\w+)\.(\w+|\*)\z/
             {
               table: {
-                database_name: $1,
-                name: $2
+                database_name: ::Regexp.last_match(1),
+                name: ::Regexp.last_match(2)
               }
             }.tap do |filter|
-              if $2 == "*"
+              if ::Regexp.last_match(2) == "*"
                 filter[:table].delete(:name)
                 filter[:table][:table_wildcard] = {}
               end
@@ -109,8 +103,6 @@ module Swa
         EOF
 
         include CollectionBehaviour
-
-        private
 
         def collection
           query_for(:list_resources, :resource_info_list, Swa::LakeFormation::ResourceInfo)
@@ -131,4 +123,5 @@ module Swa
     end
 
   end
+
 end

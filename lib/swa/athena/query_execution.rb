@@ -1,6 +1,7 @@
 require "swa/record"
 
 module Swa
+
   module Athena
 
     class QueryExecution < Record
@@ -25,4 +26,5 @@ module Swa
     end
 
   end
+
 end

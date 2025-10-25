@@ -1,6 +1,7 @@
 require "swa/record"
 
 module Swa
+
   module Glue
 
     class Job < Record
@@ -18,4 +19,5 @@ module Swa
     end
 
   end
+
 end

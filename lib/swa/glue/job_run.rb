@@ -1,6 +1,7 @@
 require "swa/record"
 
 module Swa
+
   module Glue
 
     class JobRun < Record
@@ -19,8 +20,9 @@ module Swa
       def started_on
         aws_record.started_on.iso8601
       end
-      
+
     end
 
   end
+
 end

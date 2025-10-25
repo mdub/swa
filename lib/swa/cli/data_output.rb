@@ -1,6 +1,7 @@
 require "clamp"
 
 module Swa
+
   module CLI
 
     module DataOutput
@@ -8,9 +9,9 @@ module Swa
       extend Clamp::Option::Declaration
 
       option "--format", "FORMAT", "format for data output",
-             :attribute_name => :output_format,
-             :environment_variable => "SWA_OUTPUT_FORMAT",
-             :default => "YAML"
+             attribute_name: :output_format,
+             environment_variable: "SWA_OUTPUT_FORMAT",
+             default: "YAML"
 
       option ["--json", "-J"], :flag, "output data in JSON format" do
         self.output_format = "JSON"
@@ -22,9 +23,8 @@ module Swa
 
       def output_format=(arg)
         arg = arg.upcase
-        unless %w(JSON YAML).member?(arg)
-          raise ArgumentError, "unrecognised data format: #{arg.inspect}"
-        end
+        raise ArgumentError, "unrecognised data format: #{arg.inspect}" unless %w[JSON YAML].member?(arg)
+
         @output_format = arg
       end
 
@@ -33,7 +33,7 @@ module Swa
       def format_data(data)
         case output_format
         when "JSON"
-          MultiJson.dump(data, :pretty => true)
+          MultiJson.dump(data, pretty: true)
         when "YAML"
           YAML.dump(data)
         else
@@ -42,15 +42,14 @@ module Swa
       end
 
       def display_data(data, jmespath_expression = nil)
-        unless jmespath_expression.nil?
-          data = JMESPath.search(jmespath_expression, data)
-        end
+        data = JMESPath.search(jmespath_expression, data) unless jmespath_expression.nil?
         puts format_data(data)
-      rescue JMESPath::Errors::SyntaxError => e
+      rescue JMESPath::Errors::SyntaxError
         signal_error("invalid JMESPath expression")
       end
 
     end
 
   end
+
 end

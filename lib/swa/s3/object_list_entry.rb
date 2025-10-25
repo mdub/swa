@@ -1,6 +1,7 @@
 require "swa/record"
 
 module Swa
+
   module S3
 
     class ObjectListEntry < Record
@@ -63,4 +64,5 @@ module Swa
     end
 
   end
+
 end

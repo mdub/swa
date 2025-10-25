@@ -1,4 +1,5 @@
 module Swa
+
   module CLI
 
     class Selector
@@ -28,4 +29,5 @@ module Swa
     end
 
   end
+
 end

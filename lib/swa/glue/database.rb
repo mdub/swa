@@ -1,6 +1,7 @@
 require "swa/record"
 
 module Swa
+
   module Glue
 
     class Database < Record
@@ -15,4 +16,5 @@ module Swa
     end
 
   end
+
 end

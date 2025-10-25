@@ -1,6 +1,7 @@
 require "swa/record"
 
 module Swa
+
   module Glue
 
     class Crawler < Record
@@ -21,8 +22,9 @@ module Swa
       def last_crawl_status
         aws_record.last_crawl&.status || "NEW"
       end
-      
+
     end
 
   end
+
 end

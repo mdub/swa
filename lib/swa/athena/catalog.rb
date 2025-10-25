@@ -1,6 +1,7 @@
 require "swa/record"
 
 module Swa
+
   module Athena
 
     class Catalog < Record
@@ -21,4 +22,5 @@ module Swa
     end
 
   end
+
 end

@@ -1,6 +1,7 @@
 require "swa/resource"
 
 module Swa
+
   module IAM
 
     class InstanceProfile < Resource
@@ -16,11 +17,10 @@ module Swa
       delegate :name
       delegate :arn
 
-      private
-
-      alias_method :profile, :aws_resource
+      alias profile aws_resource
 
     end
 
   end
+
 end

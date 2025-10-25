@@ -5,6 +5,7 @@ require "swa/cli/item_behaviour"
 require "swa/cloud_formation/stack"
 
 module Swa
+
   module CLI
 
     class CloudFormationCommand < BaseCommand
@@ -23,8 +24,8 @@ module Swa
 
         end
 
-        %w(parameters outputs resources).each do |thing|
-          class_eval <<-RUBY
+        %w[parameters outputs resources].each do |thing|
+          class_eval <<-RUBY, __FILE__, __LINE__ + 1
             subcommand "#{thing}", "Show #{thing}" do
               def execute
                 display_data(stack.#{thing})
@@ -47,8 +48,6 @@ module Swa
 
         include CollectionBehaviour
 
-        private
-
         def collection
           query_for(:stacks, Swa::CloudFormation::Stack)
         end
@@ -69,4 +68,5 @@ module Swa
     end
 
   end
+
 end

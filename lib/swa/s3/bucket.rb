@@ -5,6 +5,7 @@ require "swa/s3/object_list_entry"
 require "swa/s3/object_version"
 
 module Swa
+
   module S3
 
     class Bucket < Resource
@@ -58,11 +59,10 @@ module Swa
         bucket.delete
       end
 
-      private
-
-      alias_method :bucket, :aws_resource
+      alias bucket aws_resource
 
     end
 
   end
+
 end

@@ -2,6 +2,7 @@ require "swa/resource"
 require "swa/ec2/tagged_resource"
 
 module Swa
+
   module EC2
 
     class Snapshot < Resource
@@ -16,7 +17,7 @@ module Swa
         [
           field(s, :snapshot_id),
           field(s, :volume_id),
-          sprintf("%5d", volume_size),
+          format("%5d", volume_size),
           start_time.iso8601,
           rpad(progress, 4),
           quoted(description)
@@ -30,11 +31,10 @@ module Swa
 
       delegate :delete
 
-      private
-
-      alias_method :s, :aws_resource
+      alias s aws_resource
 
     end
 
   end
+
 end

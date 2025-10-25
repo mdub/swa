@@ -3,6 +3,7 @@ require "swa/resource"
 require "swa/ec2/tagged_resource"
 
 module Swa
+
   module EC2
 
     class Instance < Resource
@@ -40,7 +41,7 @@ module Swa
 
       private
 
-      alias_method :i, :aws_resource
+      alias i aws_resource
 
       def decorated_key_name
         "🔑 #{i.key_name}" if i.key_name
@@ -49,4 +50,5 @@ module Swa
     end
 
   end
+
 end

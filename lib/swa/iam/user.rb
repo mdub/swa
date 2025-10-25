@@ -1,6 +1,7 @@
 require "swa/resource"
 
 module Swa
+
   module IAM
 
     class User < Resource
@@ -13,11 +14,10 @@ module Swa
         user.name
       end
 
-      private
-
-      alias_method :user, :aws_resource
+      alias user aws_resource
 
     end
 
   end
+
 end

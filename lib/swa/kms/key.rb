@@ -1,6 +1,7 @@
 require "swa/record"
 
 module Swa
+
   module KMS
 
     class Key < Record
@@ -20,4 +21,5 @@ module Swa
     end
 
   end
+
 end

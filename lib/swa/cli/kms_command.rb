@@ -6,6 +6,7 @@ require "swa/kms/alias"
 require "swa/kms/key"
 
 module Swa
+
   module CLI
 
     class KmsCommand < BaseCommand
@@ -28,10 +29,8 @@ module Swa
 
         include ItemBehaviour
 
-        private
-
         def item
-          Swa::KMS::Key.new(kms_client.describe_key(:key_id => id).key_metadata)
+          Swa::KMS::Key.new(kms_client.describe_key(key_id: id).key_metadata)
         end
 
         subcommand ["policies"], "Show key policies" do
@@ -61,8 +60,6 @@ module Swa
 
         include CollectionBehaviour
 
-        private
-
         def collection
           query_for(:list_keys, :keys, Swa::KMS::Key)
         end
@@ -82,4 +79,5 @@ module Swa
     end
 
   end
+
 end

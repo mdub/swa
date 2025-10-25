@@ -1,6 +1,7 @@
 require "swa/resource"
 
 module Swa
+
   module IAM
 
     class Group < Resource
@@ -19,11 +20,10 @@ module Swa
         arn
       end
 
-      private
-
-      alias_method :group, :aws_resource
+      alias group aws_resource
 
     end
 
   end
+
 end

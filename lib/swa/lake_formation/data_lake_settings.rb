@@ -1,6 +1,7 @@
 require "swa/record"
 
 module Swa
+
   module LakeFormation
 
     class DataLakeSettings < Record
@@ -8,4 +9,5 @@ module Swa
     end
 
   end
+
 end

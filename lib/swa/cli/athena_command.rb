@@ -10,12 +10,13 @@ require "swa/athena/query_execution"
 require "swa/athena/work_group"
 
 module Swa
+
   module CLI
 
     class AthenaCommand < BaseCommand
 
       option "--catalog", "NAME", "Data catalog name", default: "AwsDataCatalog"
-      option %w(--workgroup -W), "NAME", "Workgroup name"
+      option %w[--workgroup -W], "NAME", "Workgroup name"
 
       subcommand "catalogs", "Show catalogs" do
 
@@ -35,8 +36,6 @@ module Swa
 
         include ItemBehaviour
 
-        private
-
         def item
           Swa::Athena::Database.new(
             athena_client.get_database(catalog_name: catalog, database_name: database).database
@@ -48,8 +47,6 @@ module Swa
       subcommand ["databases", "dbs"], "Show databases" do
 
         include CollectionBehaviour
-
-        private
 
         def collection
           query_for(:list_databases, :database_list, Swa::Athena::Database, catalog_name: catalog)
@@ -101,8 +98,6 @@ module Swa
 
         include ItemBehaviour
 
-        private
-
         def item
           Swa::Athena::QueryExecution.new(
             athena_client.get_query_execution(query_execution_id: execution_id).query_execution
@@ -140,7 +135,7 @@ module Swa
 
         include CanOutputResults
 
-        parameter "[QUERY]", "SQL query", :default => "STDIN"
+        parameter "[QUERY]", "SQL query", default: "STDIN"
 
         def execute
           if explain?
@@ -151,8 +146,6 @@ module Swa
           show_statistics(statistics)
           display_query_results(results)
         end
-
-        private
 
         def default_query
           $stdin.read
@@ -176,10 +169,10 @@ module Swa
           query_execution_output = wait_for_query(query_execution_id)
           query_still_running = false
           results = athena_client.get_query_results(query_execution_id: query_execution_id)
-          return results, query_execution_output.query_execution.statistics
-        rescue Aws::Waiters::Errors::FailureStateError => error
+          [results, query_execution_output.query_execution.statistics]
+        rescue Aws::Waiters::Errors::FailureStateError => e
           query_still_running = false
-          signal_error error.response.query_execution.status.state_change_reason
+          signal_error e.response.query_execution.status.state_change_reason
         ensure
           if query_still_running
             logger.warn "Cancelling query #{query_execution_id}"
@@ -207,8 +200,6 @@ module Swa
       subcommand ["workgroups", "wgs"], "Show work-groups" do
 
         include CollectionBehaviour
-
-        private
 
         def collection
           query_for(:list_work_groups, :work_groups, Swa::Athena::WorkGroup)
@@ -240,19 +231,19 @@ module Swa
                   "matcher" => "path",
                   "argument" => "query_execution.status.state",
                   "expected" => "SUCCEEDED",
-                  "state" => "success",
+                  "state" => "success"
                 },
                 {
                   "matcher" => "path",
                   "argument" => "query_execution.status.state",
                   "expected" => "FAILED",
-                  "state" => "failure",
+                  "state" => "failure"
                 },
                 {
                   "matcher" => "path",
                   "argument" => "query_execution.status.state",
                   "expected" => "CANCELLED",
-                  "state" => "error",
+                  "state" => "error"
                 }
               ]
             )
@@ -268,4 +259,5 @@ module Swa
     end
 
   end
+
 end

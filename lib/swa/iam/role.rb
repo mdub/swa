@@ -5,6 +5,7 @@ require "swa/iam/role_policy"
 require "uri"
 
 module Swa
+
   module IAM
 
     class Role < Resource
@@ -37,11 +38,10 @@ module Swa
         URI.decode_uri_component(role.assume_role_policy_document)
       end
 
-      private
-
-      alias_method :role, :aws_resource
+      alias role aws_resource
 
     end
 
   end
+
 end

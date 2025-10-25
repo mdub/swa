@@ -1,10 +1,10 @@
 module Swa
+
   module CLI
 
     module ItemBehaviour
 
       def self.included(target)
-
         target.subcommand ["summary", "s"], "One-line summary" do
           def execute
             puts item.summary
@@ -20,10 +20,10 @@ module Swa
           end
 
         end
-
       end
 
     end
 
   end
+
 end

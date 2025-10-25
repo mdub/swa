@@ -1,6 +1,7 @@
 require "swa/record"
 
 module Swa
+
   module KMS
 
     class Alias < Record
@@ -27,4 +28,5 @@ module Swa
     end
 
   end
+
 end

@@ -1,6 +1,7 @@
 require "swa/record"
 
 module Swa
+
   module Athena
 
     class Database < Record
@@ -18,4 +19,5 @@ module Swa
     end
 
   end
+
 end

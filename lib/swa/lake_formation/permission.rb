@@ -1,6 +1,7 @@
 require "swa/record"
 
 module Swa
+
   module LakeFormation
 
     class Permission < Record
@@ -23,10 +24,11 @@ module Swa
       def resource_summary
         h = aws_record.resource.to_hash.compact
         type, details = h.first
-        "#{type}:#{details.values.join("/")}"
+        "#{type}:#{details.values.join('/')}"
       end
 
     end
 
   end
+
 end

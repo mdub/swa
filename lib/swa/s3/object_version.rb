@@ -1,6 +1,7 @@
 require "swa/resource"
 
 module Swa
+
   module S3
 
     class ObjectVersion < Resource
@@ -23,7 +24,7 @@ module Swa
       end
 
       def size
-        version.data.to_h.fetch(:size, '-')
+        version.data.to_h.fetch(:size, "-")
       end
 
       def uri
@@ -44,7 +45,7 @@ module Swa
           bucket: version.bucket_name,
           key: version.object_key,
           version_id: version.id,
-          progress_callback: progress_callback,
+          progress_callback: progress_callback
         }
         downloader.download(file_name, options)
       end
@@ -53,11 +54,10 @@ module Swa
         version.delete
       end
 
-      private
-
-      alias_method :version, :aws_resource
+      alias version aws_resource
 
     end
 
   end
+
 end

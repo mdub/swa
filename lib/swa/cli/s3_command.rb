@@ -7,13 +7,14 @@ require "swa/s3/bucket"
 require "swa/s3/object"
 
 module Swa
+
   module CLI
 
     class S3Command < BaseCommand
 
       subcommand "bucket", "Show bucket" do
 
-        parameter "NAME", "bucket name", :attribute_name => :bucket_name
+        parameter "NAME", "bucket name", attribute_name: :bucket_name
 
         include ItemBehaviour
 
@@ -43,7 +44,7 @@ module Swa
 
         subcommand "object", "Show object" do
 
-          parameter "KEY", "object key", :attribute_name => :object_key
+          parameter "KEY", "object key", attribute_name: :object_key
 
           include ItemBehaviour
 
@@ -65,7 +66,7 @@ module Swa
 
           subcommand "put", "PUT object" do
 
-            parameter "[PAYLOAD]", "data", :default => "STDIN"
+            parameter "[PAYLOAD]", "data", default: "STDIN"
 
             def execute
               object.put(payload)
@@ -81,7 +82,7 @@ module Swa
 
           subcommand "upload", "Upload file" do
 
-            parameter "FILE", "file name", :attribute_name => :file_name
+            parameter "FILE", "file name", attribute_name: :file_name
 
             def execute
               object.upload_from(file_name)
@@ -91,14 +92,12 @@ module Swa
 
           subcommand "download", "download object to local file" do
 
-            option %w(-T --to), "TARGET", "file or directory to download into", default: ".", attribute_name: :target
+            option %w[-T --to], "TARGET", "file or directory to download into", default: ".", attribute_name: :target
 
             def execute
               object.download_into(target_file_path, &method(:log_download_progress))
               logger.info "Downloaded to #{target_file_path}"
             end
-
-            private
 
             def target_file_path
               if File.directory?(target)
@@ -121,7 +120,7 @@ module Swa
 
           subcommand ["version", "v"], "Show version" do
 
-            parameter "ID", "object version ID", :attribute_name => :version_id
+            parameter "ID", "object version ID", attribute_name: :version_id
 
             include ItemBehaviour
 
@@ -135,14 +134,12 @@ module Swa
 
             subcommand "download", "download version to local file" do
 
-              option %w(-T --to), "TARGET", "file or directory to download into", default: ".", attribute_name: :target
+              option %w[-T --to], "TARGET", "file or directory to download into", default: ".", attribute_name: :target
 
               def execute
                 version.download_into(target_file_path)
                 logger.info "Downloaded to #{target_file_path}"
               end
-
-              private
 
               def target_file_path
                 if File.directory?(target)
@@ -168,15 +165,11 @@ module Swa
 
             include CollectionBehaviour
 
-            protected
-
             def collection
-              bucket.object_versions(:prefix => object_key)
+              bucket.object_versions(prefix: object_key)
             end
 
           end
-
-          protected
 
           def object
             Swa::S3::Object.new(aws_bucket.object(object_key))
@@ -194,7 +187,7 @@ module Swa
 
           subcommand ["list", "ls"], "One-line summary" do
 
-            option %w(-R --recursive), :flag, "list recursively"
+            option %w[-R --recursive], :flag, "list recursively"
 
             def execute
               delimiter = "/" unless recursive?
@@ -225,8 +218,6 @@ module Swa
             end
 
           end
-
-          protected
 
           def objects
             bucket.objects(prefix: prefix)
@@ -271,10 +262,8 @@ module Swa
 
           end
 
-          protected
-
           def versions
-            bucket.object_versions(:prefix => prefix)
+            bucket.object_versions(prefix: prefix)
           end
 
         end
@@ -330,4 +319,5 @@ module Swa
     end
 
   end
+
 end

@@ -13,6 +13,7 @@ require "swa/ec2/volume"
 require "swa/ec2/vpc"
 
 module Swa
+
   module CLI
 
     class Ec2Command < BaseCommand
@@ -56,7 +57,7 @@ module Swa
           use `--owned-by` to select a different scope.
         EOF
 
-        option "--owned-by", "OWNER", "with specified owner", :default => "self"
+        option "--owned-by", "OWNER", "with specified owner", default: "self"
         option "--named", "PATTERN", "with matching name"
 
         option ["--created-after", "--after"], "WHEN", "earliest creation-date"
@@ -64,8 +65,6 @@ module Swa
 
         include TagFilterOptions
         include CollectionBehaviour
-
-        private
 
         def named=(name_pattern)
           add_filter("name", name_pattern)
@@ -108,8 +107,8 @@ module Swa
 
         end
 
-        %w(stop start reboot terminate).each do |action|
-          class_eval <<-RUBY
+        %w[stop start reboot terminate].each do |action|
+          class_eval <<-RUBY, __FILE__, __LINE__ + 1
             subcommand "#{action}", "#{action.capitalize} the instance" do
               def execute
                 instance.#{action}
@@ -117,8 +116,6 @@ module Swa
             end
           RUBY
         end
-
-        private
 
         def instance
           Swa::EC2::Instance.new(ec2.instance(instance_id))
@@ -138,7 +135,7 @@ module Swa
         EOF
 
         option ["--state"], "STATE", "with specified status",
-               :default => "running"
+               default: "running"
 
         option "--named", "NAME", "with matching name" do |name|
           add_tag_filter("Name", name)
@@ -162,8 +159,8 @@ module Swa
         include TagFilterOptions
         include CollectionBehaviour
 
-        %w(stop start reboot terminate).each do |action|
-          class_eval <<-RUBY
+        %w[stop start reboot terminate].each do |action|
+          class_eval <<-RUBY, __FILE__, __LINE__ + 1
             subcommand "#{action}", "#{action.capitalize} all instances" do
               def execute
                 instances.each do |i|
@@ -188,8 +185,6 @@ module Swa
           end
         end
 
-        private
-
         def instances
           add_filter("instance-state-name", state)
           query_for(:instances, Swa::EC2::Instance)
@@ -210,8 +205,6 @@ module Swa
             key_pair.delete
           end
         end
-
-        private
 
         def key_pair
           Swa::EC2::KeyPair.new(ec2.key_pair(name))
@@ -237,8 +230,6 @@ module Swa
             key_pairs.each(&:delete)
           end
         end
-
-        private
 
         def named=(pattern)
           selector.add do |kp|
@@ -266,8 +257,6 @@ module Swa
           end
         end
 
-        private
-
         def security_group
           Swa::EC2::SecurityGroup.new(ec2.security_group(group_id))
         end
@@ -286,8 +275,6 @@ module Swa
             security_groups.each(&:delete)
           end
         end
-
-        private
 
         def security_groups
           query_for(:security_groups, Swa::EC2::SecurityGroup)
@@ -309,8 +296,6 @@ module Swa
           end
         end
 
-        private
-
         def snapshot
           Swa::EC2::Snapshot.new(ec2.snapshot(snapshot_id))
         end
@@ -328,7 +313,7 @@ module Swa
           use `--owned-by` to select a different scope.
         EOF
 
-        option "--owned-by", "OWNER", "with specified owner", :default => "self"
+        option "--owned-by", "OWNER", "with specified owner", default: "self"
         option ["--volume", "--of"], "VOLUME-ID", "for specified volume"
 
         option ["--started-after", "--after"], "WHEN", "earliest start-time"
@@ -336,8 +321,6 @@ module Swa
 
         include TagFilterOptions
         include CollectionBehaviour
-
-        private
 
         def volume=(volume_id)
           add_filter("volume-id", volume_id)
@@ -372,8 +355,6 @@ module Swa
 
         include ItemBehaviour
 
-        private
-
         def subnet
           Swa::EC2::Subnet.new(ec2.subnet(subnet_id))
         end
@@ -386,8 +367,6 @@ module Swa
 
         include TagFilterOptions
         include CollectionBehaviour
-
-        private
 
         def subnets
           query_for(:subnets, Swa::EC2::Subnet)
@@ -402,8 +381,6 @@ module Swa
         parameter "VOLUME-ID", "volume id"
 
         include ItemBehaviour
-
-        private
 
         def volume
           Swa::EC2::Volume.new(ec2.volume(volume_id))
@@ -422,8 +399,6 @@ module Swa
         include TagFilterOptions
         include CollectionBehaviour
 
-        private
-
         def volumes
           query_for(:volumes, Swa::EC2::Volume)
         end
@@ -437,8 +412,6 @@ module Swa
         parameter "VPC-ID", "vpc id"
 
         include ItemBehaviour
-
-        private
 
         def vpc
           Swa::EC2::Vpc.new(ec2.vpc(vpc_id))
@@ -456,8 +429,6 @@ module Swa
         option "--named", "NAME", "with matching name" do |name|
           add_tag_filter("Name", name)
         end
-
-        private
 
         def vpcs
           query_for(:vpcs, Swa::EC2::Vpc)
@@ -482,4 +453,5 @@ module Swa
     end
 
   end
+
 end

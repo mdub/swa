@@ -10,6 +10,7 @@ require "swa/iam/role"
 require "swa/iam/user"
 
 module Swa
+
   module CLI
 
     class IamCommand < BaseCommand
@@ -36,8 +37,6 @@ module Swa
 
         include CollectionBehaviour
 
-        private
-
         def collection
           query_for(:groups, Swa::IAM::Group)
         end
@@ -49,8 +48,6 @@ module Swa
         parameter "NAME", "name/ARN"
 
         include ItemBehaviour
-
-        private
 
         def item
           Swa::IAM::InstanceProfile.new(iam.instance_profile(File.basename(name)))
@@ -66,8 +63,6 @@ module Swa
 
         include CollectionBehaviour
 
-        private
-
         def collection
           query_for(:instance_profiles, Swa::IAM::InstanceProfile)
         end
@@ -79,8 +74,6 @@ module Swa
         parameter "ARN", "policy ARN"
 
         include ItemBehaviour
-
-        private
 
         def item
           Swa::IAM::Policy.new(iam.policy(arn))
@@ -117,14 +110,12 @@ module Swa
 
         include CollectionBehaviour
 
-        private
-
         def collection
           query_for(:policies, Swa::IAM::Policy, query_options)
         end
 
         def query_options
-          { :scope => scope }.reject { |_k,v| v.nil? }
+          { scope: scope }.reject { |_k, v| v.nil? }
         end
 
       end
@@ -134,8 +125,6 @@ module Swa
         parameter "NAME", "role name/ARN"
 
         include ItemBehaviour
-
-        private
 
         def role
           Swa::IAM::Role.new(iam.role(File.basename(name)))
@@ -148,8 +137,8 @@ module Swa
         subcommand "assume", "Assume the role" do
 
           option "--session-name", "NAME", "STS session-name",
-                 :environment_variable => "USER",
-                 :default => "swa"
+                 environment_variable: "USER",
+                 default: "swa"
 
           parameter "[COMMAND] ...", "command to execute"
 
@@ -162,18 +151,16 @@ module Swa
             end
           end
 
-          private
-
           def assume
             response = sts_client.assume_role(
-              :role_arn => item.arn,
-              :role_session_name => session_name
+              role_arn: item.arn,
+              role_session_name: session_name
             )
             Swa::IAM::Credentials.new(response.credentials.to_h)
           end
 
           def dump_env(env)
-            env.each do |k,v|
+            env.each do |k, v|
               puts "#{k}=#{v}"
             end
           end
@@ -184,8 +171,6 @@ module Swa
 
           include CollectionBehaviour
 
-          private
-
           def collection
             role.attached_policies
           end
@@ -195,8 +180,6 @@ module Swa
         subcommand ["policies"], "Show role policies." do
 
           include CollectionBehaviour
-
-          private
 
           def collection
             role.policies
@@ -218,8 +201,6 @@ module Swa
 
           end
 
-          private
-
           def item
             role.policy(policy_name)
           end
@@ -230,8 +211,8 @@ module Swa
 
           parameter "ACTION ...", "action to simulate"
 
-          option %w(--resource -R), "RESOURCE", "resource ARN", :multivalued => true do |arg|
-            arg.sub(%r(\As3://), "arn:aws:s3:::")
+          option %w[--resource -R], "RESOURCE", "resource ARN", multivalued: true do |arg|
+            arg.sub(%r{\As3://}, "arn:aws:s3:::")
           end
 
           def execute
@@ -244,7 +225,6 @@ module Swa
           end
 
           include DataPresentation
-
 
         end
 
@@ -259,8 +239,6 @@ module Swa
             def execute
               display_data(trust_policy_data, query)
             end
-
-            private
 
             def trust_policy_data
               JSON.parse(role.assume_role_policy_document)
@@ -288,8 +266,6 @@ module Swa
 
         include CollectionBehaviour
 
-        private
-
         def collection
           query_for(:roles, Swa::IAM::Role)
         end
@@ -301,8 +277,6 @@ module Swa
         parameter "NAME", "user name/ARN"
 
         include ItemBehaviour
-
-        private
 
         def item
           Swa::IAM::User.new(iam.user(File.basename(name)))
@@ -318,8 +292,6 @@ module Swa
 
         include CollectionBehaviour
 
-        private
-
         def collection
           query_for(:users, Swa::IAM::User)
         end
@@ -334,7 +306,7 @@ module Swa
 
       def query_for(query_method, resource_model, *query_args)
         aws_resources = iam.public_send(query_method, *query_args)
-        wrapped_resources = resource_model.list(aws_resources)
+        resource_model.list(aws_resources)
       end
 
       def sts_client
@@ -344,4 +316,5 @@ module Swa
     end
 
   end
+
 end

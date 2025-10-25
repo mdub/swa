@@ -1,6 +1,7 @@
 require "clamp"
 
 module Swa
+
   module CLI
 
     module FilterOptions
@@ -8,7 +9,7 @@ module Swa
       extend Clamp::Option::Declaration
 
       option "--filter", "NAME=VALUE", "apply a filter",
-             :multivalued => true, :attribute_name => :filters
+             multivalued: true, attribute_name: :filters
 
       protected
 
@@ -26,10 +27,12 @@ module Swa
       def append_to_filters(arg)
         name, value = arg.split("=", 2)
         raise ArgumentError, "no value supplied" unless value
+
         add_filter(name, value)
       end
 
     end
 
   end
+
 end

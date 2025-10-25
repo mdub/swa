@@ -2,6 +2,7 @@ require "swa/resource"
 require "swa/s3/object_version"
 
 module Swa
+
   module S3
 
     class Object < Resource
@@ -35,7 +36,7 @@ module Swa
       end
 
       def put(io, options = {})
-        object.put(options.merge(:body => io))
+        object.put(options.merge(body: io))
       end
 
       def upload_from(file_name)
@@ -50,11 +51,10 @@ module Swa
         Swa::S3::ObjectVersion.new(object.version(version_id))
       end
 
-      private
-
-      alias_method :object, :aws_resource
+      alias object aws_resource
 
     end
 
   end
+
 end

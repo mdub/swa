@@ -2,6 +2,7 @@ require "swa/ec2/tagged_resource"
 require "swa/resource"
 
 module Swa
+
   module EC2
 
     class Subnet < Resource
@@ -26,11 +27,10 @@ module Swa
         tags["Name"]
       end
 
-      private
-
-      alias_method :subnet, :aws_resource
+      alias subnet aws_resource
 
     end
 
   end
+
 end

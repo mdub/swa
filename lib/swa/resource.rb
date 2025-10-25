@@ -14,7 +14,7 @@ module Swa
     end
 
     attr_reader :aws_resource
-    alias_method :_resource_, :aws_resource
+    alias _resource_ aws_resource
 
     include DataPresentation
 

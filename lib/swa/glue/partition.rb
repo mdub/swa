@@ -1,6 +1,7 @@
 require "swa/record"
 
 module Swa
+
   module Glue
 
     class Partition < Record
@@ -19,8 +20,9 @@ module Swa
       def creation_time
         aws_record.creation_time.iso8601
       end
-      
+
     end
 
   end
+
 end

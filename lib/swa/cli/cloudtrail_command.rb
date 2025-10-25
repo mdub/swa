@@ -4,6 +4,7 @@ require "swa/cli/collection_behaviour"
 require "swa/cloud_trail/event"
 
 module Swa
+
   module CLI
 
     class CloudtrailCommand < BaseCommand
@@ -33,9 +34,11 @@ module Swa
           parse_datetime(value).begin
         end
 
-        option "--where", "FIELD=VALUE", "filter by field (can be specified multiple times)", :multivalued => true do |spec|
+        option "--where", "FIELD=VALUE", "filter by field (can be specified multiple times)",
+               multivalued: true do |spec|
           field, value = spec.split("=", 2)
           raise ArgumentError, "invalid --where format, expected FIELD=VALUE" if field.nil? || value.nil?
+
           { field: field, pattern: compile_pattern(value) }
         end
 
@@ -75,7 +78,7 @@ module Swa
         def compile_pattern(value)
           if value.include?("*") || value.include?("?")
             # Convert shell-style wildcards to regex
-            regex_pattern = Regexp.escape(value).gsub('\*', '.*').gsub('\?', '.')
+            regex_pattern = Regexp.escape(value).gsub('\*', ".*").gsub('\?', ".")
             Regexp.new("^#{regex_pattern}$", Regexp::IGNORECASE)
           else
             # Return as string for exact match and API filtering
@@ -99,6 +102,7 @@ module Swa
 
           # Convert field value to string for matching
           return false if field_value.nil?
+
           field_value_str = field_value.to_s
 
           # Match using pattern (either string or regex)
@@ -120,4 +124,5 @@ module Swa
     end
 
   end
+
 end
