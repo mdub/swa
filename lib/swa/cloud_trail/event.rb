@@ -7,11 +7,10 @@ module Swa
 
       def summary
         [
-          pad(event_id, 68),
-          pad(event_time, 28),
-          pad(event_source || "-", 25),
-          pad(event_name, 40),
-          pad(username || "-", 30)
+          pad(event_time, 25),
+          pad(event_id, 36),
+          pad(event_source || "-", 24),
+          event_name
         ].join("  ")
       end
 
