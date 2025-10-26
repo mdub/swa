@@ -82,11 +82,6 @@ SWA is packaged as a Ruby gem, and can be installed with:
 
     gem install swa
 
-On a Mac, I recommend [brew-gem](https://github.com/sportngin/brew-gem) for easy system-wide installation:
-
-    brew install brew-gem
-    brew gem install swa
-
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/mdub/swa.
