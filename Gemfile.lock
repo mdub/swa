@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    swa (1.0.0)
+    swa (1.0.1)
       aws-sdk-athena (~> 1)
       aws-sdk-cloudformation (~> 1)
       aws-sdk-cloudtrail (~> 1)
