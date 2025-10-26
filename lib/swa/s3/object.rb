@@ -29,7 +29,7 @@ module Swa
         uri
       end
 
-      def get_body
+      def body
         object.get.body
       end
 

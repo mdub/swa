@@ -37,7 +37,7 @@ module Swa
         uri
       end
 
-      def get_body
+      def body
         version.get.body
       end
 

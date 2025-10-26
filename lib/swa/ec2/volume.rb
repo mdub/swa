@@ -32,7 +32,7 @@ module Swa
       end
 
       def attachment
-        v.attachments.first || OpenStruct.new
+        v.attachments.first || OpenStruct.new # rubocop:disable Style/OpenStructUse
       end
 
       delegate :delete

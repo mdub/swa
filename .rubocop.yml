@@ -1,3 +1,7 @@
+AllCops:
+  NewCops: enable
+  SuggestExtensions: false
+
 Layout/EmptyLinesAroundBlockBody:
   Enabled: false
   EnforcedStyle: empty_lines
@@ -5,7 +9,31 @@ Layout/EmptyLinesAroundClassBody:
   EnforcedStyle: empty_lines
 Layout/EmptyLinesAroundModuleBody:
   EnforcedStyle: empty_lines
+
+Lint/DuplicateBranch:
+  Enabled: false
+Lint/NestedMethodDefinition:
+  Enabled: false
+
+Metrics/AbcSize:
+  Max: 40
+Metrics/BlockLength:
+  Max: 25
+  AllowedMethods:
+    - subcommand
+Metrics/ClassLength:
+  Enabled: false
+Metrics/CyclomaticComplexity:
+  Max: 15
 Metrics/MethodLength:
-  Max: 16
+  Max: 30
+Metrics/PerceivedComplexity:
+  Max: 15
+
+Naming/HeredocDelimiterNaming:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
 Style/StringLiterals:
   EnforcedStyle: double_quotes

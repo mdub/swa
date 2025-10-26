@@ -27,7 +27,7 @@ module Swa
       option ["--debug"], :flag, "enable debugging"
 
       def run(arguments)
-        super(arguments)
+        super
       rescue Aws::Errors::MissingCredentialsError
         signal_error "no credentials provided"
       rescue Aws::Errors::InvalidProcessCredentialsPayload => e
@@ -58,14 +58,14 @@ module Swa
           session_token: session_token,
           region: region,
           logger: logger, log_level: :debug
-        }.reject { |_k, v| v.nil? }
+        }.compact
       end
 
       def parse(arguments)
         if (arguments.first =~ /^(\w+)-[0-9a-f]+$/) && self.class.find_subcommand(::Regexp.last_match(1))
           arguments = [::Regexp.last_match(1)] + arguments
         end
-        super(arguments)
+        super
       end
 
       def parse_datetime(datetime_string)

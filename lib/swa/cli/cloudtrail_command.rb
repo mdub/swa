@@ -20,7 +20,7 @@ module Swa
         end
 
         option "--source", "SERVICE", "filter by event source (e.g. kms)" do |value|
-          value = value.include?(".") ? value : "#{value}.amazonaws.com"
+          value = "#{value}.amazonaws.com" unless value.include?(".")
           compile_pattern(value)
         end
 
@@ -64,8 +64,8 @@ module Swa
           events = query_for(:lookup_events, :events, Swa::CloudTrail::Event, **query_args)
 
           # Apply programmatic filters
-          events = events.select { |event| name === event.event_name } if name
-          events = events.select { |event| source === event.event_source } if source
+          events = events.select { |event| name === event.event_name } if name # rubocop:disable Style/CaseEquality
+          events = events.select { |event| source === event.event_source } if source # rubocop:disable Style/CaseEquality
 
           # Apply --where filters
           if where_list && !where_list.empty?
@@ -108,7 +108,7 @@ module Swa
           field_value_str = field_value.to_s
 
           # Match using pattern (either string or regex)
-          pattern === field_value_str
+          pattern === field_value_str # rubocop:disable Style/CaseEquality
         end
 
       end

@@ -27,7 +27,12 @@ module Swa
         end
 
         %w[parameters outputs resources].each do |thing|
-          class_eval <<-RUBY, __FILE__, __LINE__ + 1
+          # subcommand "parameters", "Show parameters" do
+          #   def execute
+          #     display_data(stack.parameters)
+          #   end
+          # end
+          class_eval <<-RUBY, __FILE__, __LINE__ + 1 # rubocop:disable Style/DocumentDynamicEvalDefinition
             subcommand "#{thing}", "Show #{thing}" do
               def execute
                 display_data(stack.#{thing})

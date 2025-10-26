@@ -12,14 +12,14 @@ module Swa
       %("#{value}") if value && !value.empty?
     end
 
-    def pad(s, width)
-      s = (s || "").to_s
-      s.ljust(width)
+    def pad(str, width)
+      str = (str || "").to_s
+      str.ljust(width)
     end
 
-    def rpad(s, width)
-      s = (s || "").to_s
-      s.rjust(width)
+    def rpad(str, width)
+      str = (str || "").to_s
+      str.rjust(width)
     end
 
     WIDTH_BY_TYPE = {
@@ -47,7 +47,7 @@ module Swa
     def stringify_keys(data)
       case data
       when Hash
-        data.map { |k, v| [k.to_s, stringify_keys(v)] }.to_h
+        data.to_h { |k, v| [k.to_s, stringify_keys(v)] }
       when Array
         data.map { |v| stringify_keys(v) }
       else

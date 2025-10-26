@@ -61,7 +61,7 @@ module Swa
           subcommand "get", "GET object" do
 
             def execute
-              IO.copy_stream(object.get_body, $stdout)
+              IO.copy_stream(object.body, $stdout)
             end
 
           end
@@ -129,7 +129,7 @@ module Swa
             subcommand "get", "GET object" do
 
               def execute
-                IO.copy_stream(version.get_body, $stdout)
+                IO.copy_stream(version.body, $stdout)
               end
 
             end

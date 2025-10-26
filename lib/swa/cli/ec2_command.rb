@@ -110,7 +110,12 @@ module Swa
         end
 
         %w[stop start reboot terminate].each do |action|
-          class_eval <<-RUBY, __FILE__, __LINE__ + 1
+          # subcommand "stop", "Stop the instance" do
+          #   def execute
+          #     instance.stop
+          #   end
+          # end
+          class_eval <<-RUBY, __FILE__, __LINE__ + 1 # rubocop:disable Style/DocumentDynamicEvalDefinition
             subcommand "#{action}", "#{action.capitalize} the instance" do
               def execute
                 instance.#{action}
@@ -162,7 +167,12 @@ module Swa
         include CollectionBehaviour
 
         %w[stop start reboot terminate].each do |action|
-          class_eval <<-RUBY, __FILE__, __LINE__ + 1
+          # subcommand "stop", "Stop all instances" do
+          #   def execute
+          #     instances.each { |i| i.stop }
+          #   end
+          # end
+          class_eval <<-RUBY, __FILE__, __LINE__ + 1 # rubocop:disable Style/DocumentDynamicEvalDefinition
             subcommand "#{action}", "#{action.capitalize} all instances" do
               def execute
                 instances.each do |i|

@@ -117,7 +117,7 @@ module Swa
         end
 
         def query_options
-          { scope: scope }.reject { |_k, v| v.nil? }
+          { scope: scope }.compact
         end
 
       end
