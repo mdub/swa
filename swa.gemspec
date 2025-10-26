@@ -34,7 +34,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "aws-sdk-s3", "~> 1"
   spec.add_dependency "csv", "~> 3.0"
   spec.add_dependency "openssl", "~> 3.3", ">= 3.3.1"
-  spec.add_dependency "pry", "~> 0.14"
+  spec.add_dependency "pry", "~> 0.15"
 
   spec.add_dependency "bytesize", "~> 0.1"
   spec.add_dependency "chronic", "~> 0.10"
