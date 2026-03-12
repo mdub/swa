@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "clamp/completion"
+
 require "swa/cli/base_command"
 require "swa/cli/athena_command"
 require "swa/cli/cloud_formation_command"
