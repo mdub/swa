@@ -38,7 +38,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "bytesize", "~> 0.1"
   spec.add_dependency "chronic", "~> 0.10"
-  spec.add_dependency "clamp", "~> 1.5", ">= 1.5.1"
+  spec.add_dependency "clamp", "~> 1.5", ">= 1.5.2"
   spec.add_dependency "console_logger", "~> 1.0.0"
   spec.add_dependency "multi_json", "~> 1.15"
   spec.add_dependency "ox", "~> 2.14"
