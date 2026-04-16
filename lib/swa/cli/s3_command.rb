@@ -191,9 +191,15 @@ module Swa
 
             option %w[-R --recursive], :flag, "list recursively"
 
+            option ["-n", "--limit"], "N", "max number of entries to list" do |n|
+              Integer(n)
+            end
+
             def execute
               delimiter = "/" unless recursive?
-              bucket.object_list_entries(prefix: prefix, delimiter: delimiter).each do |e|
+              entries = bucket.object_list_entries(prefix: prefix, delimiter: delimiter)
+              entries = entries.take(limit) if limit
+              entries.each do |e|
                 puts e.summary
               end
             end
