@@ -12,6 +12,7 @@ require "swa/glue/job_run"
 require "swa/glue/job_bookmark_entry"
 require "swa/glue/partition"
 require "swa/glue/table"
+require "swa/glue/table_version"
 
 module Swa
 
@@ -94,6 +95,17 @@ module Swa
             def collection
               query_for(:get_partitions, :partitions, Swa::Glue::Partition, catalog_id: catalog,
                                                                             database_name: name, table_name: table_name)
+            end
+
+          end
+
+          subcommand ["versions"], "Show table versions" do
+
+            include CollectionBehaviour
+
+            def collection
+              query_for(:get_table_versions, :table_versions, Swa::Glue::TableVersion,
+                        catalog_id: catalog, database_name: name, table_name: table_name)
             end
 
           end
